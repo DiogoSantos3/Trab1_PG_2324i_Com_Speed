@@ -48,9 +48,9 @@ fun Game.doAction(action: Action?): Game {
 
         Action.WALK_RIGHT -> if(man.speed.isZero()&& !man.copy(Point(man.pos.x+CELL_WIDTH,man.pos.y)).DetectIfisInsideFloor(floor))  newStateMove(Direction.RIGHT, man) else this
 
-        Action.UP_STAIRS ->if(man.DetectIfisStairs(stairs)) newStateMove(Direction.UP, man) else this
+        Action.UP_STAIRS ->if(man.DetectIfisStairs(stairs) && man.speed.isZero()) newStateMove(Direction.UP, man) else this
 
-        Action.DOWN_STAIRS ->if(man.DetectIfisStairs(stairs) && !man.DetectIfisFloor(floor)) newStateMove(Direction.DOWN, man) else this
+        Action.DOWN_STAIRS ->if(man.DetectIfisStairs(stairs) && !man.DetectIfisFloor(floor) && man.speed.isZero()) newStateMove(Direction.DOWN, man) else this
 
         Action.JUMP -> {
             if ( man.speed.isZero() && man.stateJump==false)
@@ -128,8 +128,3 @@ fun Game.stepFrame(): Game {
             return Game(man.move(), floor, stairs, eggs, food)
     }
 }
-
-
-
-
-
