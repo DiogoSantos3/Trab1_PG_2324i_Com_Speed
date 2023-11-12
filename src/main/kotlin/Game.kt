@@ -15,7 +15,7 @@ data class Game(
     val floor: List<Cell>,
     val stairs: List<Cell>,
     val eggs: List<Cell>,
-    val food: List<Cell>,
+    val food: List<Cell>
 )
 
 /**
@@ -46,7 +46,7 @@ fun Game.doAction(action: Action?): Game {
         //The function isStopped() is used to prevent man getting a new speed while moving, preventing it from misalignment of the grid (Used in all movements).
         Action.WALK_LEFT -> if (man.speed.isZero() && !man.copy(Point(man.pos.x+CELL_WIDTH,man.pos.y)).DetectIfisInsideFloor(floor)) newStateMove(Direction.LEFT, man) else this
 
-        Action.WALK_RIGHT -> if(man.speed.isZero()&& !man.copy(Point(man.pos.x+CELL_WIDTH,man.pos.y)).DetectIfisInsideFloor(floor))  newStateMove(Direction.RIGHT, man) else this
+        Action.WALK_RIGHT -> if(man.speed.isZero() && !man.copy(Point(man.pos.x+CELL_WIDTH,man.pos.y)).DetectIfisInsideFloor(floor))  newStateMove(Direction.RIGHT, man) else this
 
         Action.UP_STAIRS ->if(man.DetectIfisStairs(stairs) && man.speed.isZero()) newStateMove(Direction.UP, man) else this
 
@@ -98,33 +98,35 @@ fun Game.newStateJump(direction: Direction, man: Man): Game {
 //test COMMIT 2
 
 fun Game.stepFrame(): Game {
-    println(man)
-    when{
-        (man.jumpCycle > 0 && man.isonFood(food)) ->
-            return Game(man.copy(jumpCycle = man.jumpCycle - 1).jump(), floor, stairs, eggs, man.removefood(food))
-
-        (man.jumpCycle > 0 && man.isonEggs(eggs)) ->
-            return Game(man.copy(jumpCycle = man.jumpCycle - 1).jump(), floor, stairs, man.removeEggs(eggs), food)
+    //println(man)
+   return when{
+        (man.jumpCycle > 0 && man.Food(food)) ->
+            Game(man.copy(jumpCycle = man.jumpCycle - 1).jump(), floor, stairs, eggs, man.removeFood(food))
+        (man.jumpCycle > 0 && man.Eggs(eggs)) ->
+             Game(man.copy(jumpCycle = man.jumpCycle - 1).jump(), floor, stairs, man.removeEggs(eggs), food)
 
         (man.jumpCycle > 0) ->
-            return Game(man.copy(jumpCycle = man.jumpCycle - 1).jump(), floor, stairs, eggs, food)
+             Game(man.copy(jumpCycle = man.jumpCycle - 1).jump(), floor, stairs, eggs, food)
 
         (man.DetectIfisStairs(stairs) && man.speed.isZero() && man.stateJump==false) ->
-            return Game(man.moveUpDown(), floor, stairs, eggs, food)
+             Game(man.moveUpDown(), floor, stairs, eggs, food)
 
         (!man.DetectIfisStairs(stairs) && !man.DetectIfisFloor(floor)) ->
-            return Game(man.gravity(), floor, stairs, eggs, food)
+             Game(man.gravity(), floor, stairs, eggs, food)
 
         (man.stateJump && !man.DetectIfisStairs(stairs)) ->
-            return Game(man.copy(stateJump = false, speed = Speed(0, 0)), floor, stairs, eggs, food)
+             Game(man.copy(stateJump = false, speed = Speed(0, 0)), floor, stairs, eggs, food)
 
-        (man.isonEggs(eggs)) ->
-            return Game (man.move(), floor, stairs , man.removeEggs(eggs), food)
+        (man.Eggs(eggs)) ->
+             Game (man.move(), floor, stairs , man.removeEggs(eggs), food)
 
-        (man.isonFood(food)) ->
-            return Game (man.move(), floor, stairs , eggs, man.removefood(food))
 
-        else ->
-            return Game(man.move(), floor, stairs, eggs, food)
+        (man.Food(food)) ->
+             Game (man.move(), floor, stairs , eggs, man.removeFood(food))
+
+        (!man.DetectIfisStairs(stairs) && man.DetectIfisFloor(floor)) ->
+             Game(man.move(), floor, stairs, eggs, food)
+
+        else ->  Game(man.move(), floor, stairs, eggs, food)
     }
 }

@@ -55,7 +55,6 @@ fun Man.DetectIfisStairs(stairs:List<Cell>):Boolean{
     return stairs.any { pos.toCell().col == it.col && pos.toCell().row == it.row}
 }
 
-//This function DetectIfisFloor ensures man is above a cell type Floor.
 fun Man.DetectIfisFloor(floor:List<Cell>):Boolean {
     return when {
         floor.any { pos.toCell().col == it.col && pos.toCell().row == it.row - 1 } -> true
@@ -71,17 +70,17 @@ fun Man.DetectIfisInsideFloor(floor:List<Cell>):Boolean {
 }
 
 
-fun Man.isonFood(food:List<Cell>):Boolean{
+fun Man.Food(food:List<Cell>):Boolean{
     return food.any { pos.toCell().col == it.col && pos.toCell().row == it.row}
 }
 
-fun Man.removefood(food:List<Cell>): List<Cell> {
+fun Man.removeFood(food:List<Cell>): List<Cell> {
     val manPos = this.pos.toCell()
     val foodList = food
     return foodList - manPos
 }
 
-fun Man.isonEggs(eggs:List<Cell>):Boolean{
+fun Man.Eggs(eggs:List<Cell>):Boolean{
     return eggs.any { pos.toCell().col == it.col && pos.toCell().row == it.row}
 }
 
