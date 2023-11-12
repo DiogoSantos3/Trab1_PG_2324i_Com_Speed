@@ -89,6 +89,8 @@ fun Game.newStateJump(direction: Direction, man: Man): Game {
 
 //TESTE COMMIT
 
+//test COMMIT 2
+
 fun Game.stepFrame(): Game {
     println(man)
     if (man.jumpCycle > 0) {

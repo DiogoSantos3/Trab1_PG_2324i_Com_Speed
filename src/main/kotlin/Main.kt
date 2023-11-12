@@ -1,4 +1,4 @@
-     import pt.isel.canvas.*
+import pt.isel.canvas.*
 
 private const val FRAME_TIME = 30 // in milliseconds
 
