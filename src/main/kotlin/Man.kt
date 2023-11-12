@@ -70,3 +70,23 @@ fun Man.DetectIfisInsideFloor(floor:List<Cell>):Boolean {
     }
 }
 
+
+fun Man.isonFood(food:List<Cell>):Boolean{
+    return food.any { pos.toCell().col == it.col && pos.toCell().row == it.row}
+}
+
+fun Man.removefood(food:List<Cell>): List<Cell> {
+    val manPos = this.pos.toCell()
+    val foodList = food
+    return foodList - manPos
+}
+
+fun Man.isonEggs(eggs:List<Cell>):Boolean{
+    return eggs.any { pos.toCell().col == it.col && pos.toCell().row == it.row}
+}
+
+fun Man.removeEggs(eggs:List<Cell>): List<Cell> {
+    val manPos = this.pos.toCell()
+    val eggsList = eggs
+    return eggsList - manPos
+}

@@ -67,6 +67,8 @@ fun Canvas.drawGame(game: Game) {
     drawGridLines()
     game.floor.forEach { drawSprite(it.toPoint(), Sprite(0,0)) }
     game.stairs.forEach { drawSprite(it.toPoint(), Sprite(0,1)) }
+    game.eggs.forEach { drawSprite(it.toPoint(), Sprite(1,1)) }
+    game.food.forEach { drawSprite(it.toPoint(), Sprite(1,0)) }
     drawMan(game.man)
 }
 

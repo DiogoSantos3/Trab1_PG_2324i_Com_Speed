@@ -14,6 +14,8 @@ data class Game(
     val man: Man,
     val floor: List<Cell>,
     val stairs: List<Cell>,
+    val eggs: List<Cell>,
+    val food: List<Cell>,
 )
 
 /**
@@ -27,6 +29,8 @@ fun loadGame(fileName: String) :Game {
         man = createMan( cells.first { it.type==CellType.MAN }.cell ),
         floor = cells.ofType(CellType.FLOOR),
         stairs = cells.ofType(CellType.STAIR),
+        eggs = cells.ofType(CellType.EGG),
+        food = cells.ofType(CellType.FOOD),
     )
 }
 
@@ -40,14 +44,34 @@ fun loadGame(fileName: String) :Game {
 fun Game.doAction(action: Action?): Game {
     return when (action) {
         //The function isStopped() is used to prevent man getting a new speed while moving, preventing it from misalignment of the grid (Used in all movements).
-        Action.WALK_LEFT -> if (man.speed.isZero() && !man.copy(Point(man.pos.x+CELL_WIDTH,man.pos.y)).DetectIfisInsideFloor(floor)) newStateMove(Direction.LEFT, man) else this
+        Action.WALK_LEFT ->
+            if (man.isonFood(food)) return Game (man, floor, stairs , eggs, man.removefood(food))
+
+            else if (man.isonEggs(eggs)) return Game (man, floor, stairs , man.removeEggs(eggs), food)
+
+            else if (man.speed.isZero() && !man.copy(Point(man.pos.x+CELL_WIDTH,man.pos.y)).DetectIfisInsideFloor(floor)) newStateMove(Direction.LEFT, man) else this
+
+
+
         //If man is on stairs and has floor in the same level , this condition blocks that movement (Used for left and right).
-        Action.WALK_RIGHT -> if(man.speed.isZero()&& !man.copy(Point(man.pos.x+CELL_WIDTH,man.pos.y)).DetectIfisInsideFloor(floor))  newStateMove(Direction.RIGHT, man) else this
+        Action.WALK_RIGHT ->
+            if (man.isonFood(food)) return Game (man, floor, stairs , eggs, man.removefood(food))
+
+            else if (man.isonEggs(eggs)) return Game (man, floor, stairs , man.removeEggs(eggs), food)
+
+            else if(man.speed.isZero()&& !man.copy(Point(man.pos.x+CELL_WIDTH,man.pos.y)).DetectIfisInsideFloor(floor))  newStateMove(Direction.RIGHT, man) else this
+
         //The function DetectIfStairs ensures man is on a cell type Stairs
         Action.UP_STAIRS ->if(man.DetectIfisStairs(stairs)) newStateMove(Direction.UP, man) else this
+
         Action.DOWN_STAIRS ->if(man.DetectIfisStairs(stairs) && !man.DetectIfisFloor(floor)) newStateMove(Direction.DOWN, man) else this
+
         Action.JUMP -> {
-                if ( man.speed.isZero() && man.stateJump==false)
+            if (man.isonFood(food)) return Game (man, floor, stairs , eggs, man.removefood(food))
+
+            else if (man.isonEggs(eggs)) return Game (man, floor, stairs , man.removeEggs(eggs), food)
+
+            else if ( man.speed.isZero() && man.stateJump==false)
                     return newStateJump(man.faced,man)
                 this
             }
@@ -94,15 +118,15 @@ fun Game.newStateJump(direction: Direction, man: Man): Game {
 fun Game.stepFrame(): Game {
     println(man)
     if (man.jumpCycle > 0) {
-        return Game(man.copy(jumpCycle = man.jumpCycle - 1).jump(), floor, stairs)
+        return Game(man.copy(jumpCycle = man.jumpCycle - 1).jump(), floor, stairs, eggs, food)
     } else if (man.DetectIfisStairs(stairs) && man.speed.isZero() && man.stateJump) {
-        return Game(man.moveUpDown(), floor, stairs)
+        return Game(man.moveUpDown(), floor, stairs, eggs, food)
     } else if (!man.DetectIfisStairs(stairs) && !man.DetectIfisFloor(floor)) {
-        return Game(man.gravity(), floor, stairs)
+        return Game(man.gravity(), floor, stairs, eggs, food)
     } else if (man.stateJump && !man.DetectIfisStairs(stairs)) {
-        return Game(man.copy(stateJump = false, speed = Speed(0,0)), floor, stairs)
+        return Game(man.copy(stateJump = false, speed = Speed(0,0)), floor, stairs, eggs, food)
     } else {
-        return Game(man.move(), floor, stairs)
+        return Game(man.move(), floor, stairs, eggs, food)
     }
 }
 
