@@ -69,14 +69,14 @@ fun Man.detectIfisFloororstrair(floor:List<Cell>, stairs:List<Cell>):Boolean {
     }
 }
 
-//This function DetectIfisFloor ensures man is on a cell type Floor.
+//Ensures man is on a cell type Floor.
 fun Man.detectIfisInsideFloor(floor:List<Cell>):Boolean {
     return when {
         floor.any { pos.toCell().col == it.col && pos.toCell().row == it.row } -> true
         else -> false
     }
 }
-//This function add the food to the grid
+//Add the food to the grid
 fun Man.food(food:List<Cell>):Boolean{
     return food.any { pos.toCell().col == it.col && pos.toCell().row == it.row}
 }
@@ -86,11 +86,11 @@ fun Man.removeFood(food:List<Cell>): List<Cell> {
     val foodList = food
     return foodList - manPos
 }
-//This function add the eggs to the grid
+//Add the eggs to the grid
 fun Man.eggs(eggs:List<Cell>):Boolean{
     return eggs.any { pos.toCell().col == it.col && pos.toCell().row == it.row}
 }
-//This function when called remove eggs from the grid
+//When called remove eggs from the grid
 fun Man.removeEggs(eggs:List<Cell>): List<Cell> {
     val manPos = this.pos.toCell()
     val eggsList = eggs
