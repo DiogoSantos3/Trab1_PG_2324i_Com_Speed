@@ -79,7 +79,6 @@ fun Canvas.drawGame(game: Game) {
 /**
  * Draws the man in canvas according to the direction he is facing.
  */
-
 fun Canvas.drawMan(m: Man) {
     val sprite = when(m.faced) {
         Direction.LEFT ->

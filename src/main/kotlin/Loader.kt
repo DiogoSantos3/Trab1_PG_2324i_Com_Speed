@@ -39,4 +39,3 @@ fun loadLevel(fileName: String) :List<CellContent> {
  * Returns the list of cells of the given type.
  */
 fun List<CellContent>.ofType(type: CellType) = filter { it.type == type }.map { it.cell }
-

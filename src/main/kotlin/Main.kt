@@ -20,11 +20,11 @@ fun main() {
         arena.onTimeProgress(FRAME_TIME) {
             game = game.stepFrame()
             arena.drawGame(game)
-         }
+        }
     }
     onFinish { }
 }
- 
+
 private const val SPACE_CODE = 32
 
 /**
