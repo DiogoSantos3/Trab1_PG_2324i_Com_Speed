@@ -47,6 +47,7 @@ fun Point.toCell() = Cell(y / CELL_HEIGHT, x / CELL_WIDTH)
  */
 fun Cell.toPoint() = Point(col * CELL_WIDTH, row * CELL_HEIGHT)
 
+
 /**
  * Represents a direction.
  * @property dRow the vertical displacement
