@@ -24,7 +24,7 @@ fun main() {
     }
     onFinish { }
 }
-//TEST
+
 private const val SPACE_CODE = 32
 
 /**

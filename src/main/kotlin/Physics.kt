@@ -20,7 +20,7 @@ data class Point(val x: Int, val y: Int)
 
 //FAZ OS LIMITES DA ARENA
 fun Point.limitToArea(xMax: Int, yMax: Int): Point =
-    if (x in 0..xMax && y in 0..yMax) this
+    if (x in 1..xMax && y in 0..yMax) this
     else Point( x.coerceIn(0, xMax), y.coerceIn(0, yMax))
 
 /**

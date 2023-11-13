@@ -25,7 +25,7 @@ fun createMan(cell: Cell) = Man(
     faced = Direction.LEFT,
     false,
     speed = Speed(0,0),
-    jumpCycle = 0)
+    jumpCycle = 0,)
 
 
 fun Man.move(): Man{
@@ -39,6 +39,8 @@ fun Man.moveUpDown(): Man {
 fun Man.gravity(): Man {
     return Man(pos.plus(speed= Speed(this.speed.dx,CLIMBING_SPEED)).limitToArea(MAX_X,MAX_Y), faced,this.stateJump,speed.stopIfInCell(pos.plus(speed)),0)
 }
+
+
 
 fun Man.jump(): Man {
     val newDyTemp = this.speed.dy - AC_JUMP
@@ -61,6 +63,13 @@ fun Man.DetectIfisFloor(floor:List<Cell>):Boolean {
         else -> false
     }
 }
+fun Man.DetectIfisFloororstrair(floor:List<Cell>,stairs:List<Cell>):Boolean {
+    return when {
+        floor.any { pos.toCell().col == it.col && pos.toCell().row == it.row - 1 } || stairs.any { pos.toCell().col == it.col && pos.toCell().row == it.row}-> true
+        else -> false
+    }
+}
+
 //This function DetectIfisFloor ensures man is on a cell type Floor.
 fun Man.DetectIfisInsideFloor(floor:List<Cell>):Boolean {
     return when {
@@ -68,7 +77,6 @@ fun Man.DetectIfisInsideFloor(floor:List<Cell>):Boolean {
         else -> false
     }
 }
-
 
 fun Man.Food(food:List<Cell>):Boolean{
     return food.any { pos.toCell().col == it.col && pos.toCell().row == it.row}
