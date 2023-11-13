@@ -44,9 +44,13 @@ fun loadGame(fileName: String) :Game {
 fun Game.doAction(action: Action?): Game {
     return when (action) {
         //The function isStopped() is used to prevent man getting a new speed while moving, preventing it from misalignment of the grid (Used in all movements).
-        Action.WALK_LEFT -> if (man.speed.isZero() && !man.copy(Point(man.pos.x+CELL_WIDTH,man.pos.y)).DetectIfisInsideFloor(floor)) newStateMove(Direction.LEFT, man) else this
+        Action.WALK_LEFT -> if (man.pos.x==0) this
+            else if (man.speed.isZero() && !man.copy(Point(man.pos.x+CELL_WIDTH,man.pos.y)).DetectIfisInsideFloor(floor))
+            newStateMove(Direction.LEFT, man) else this
 
-        Action.WALK_RIGHT -> if(man.speed.isZero() && !man.copy(Point(man.pos.x+CELL_WIDTH,man.pos.y)).DetectIfisInsideFloor(floor))  newStateMove(Direction.RIGHT, man) else this
+        Action.WALK_RIGHT -> if (man.pos.x==MAX_X) this
+            else if(man.speed.isZero() && !man.copy(Point(man.pos.x+CELL_WIDTH,man.pos.y)).DetectIfisInsideFloor(floor))
+                newStateMove(Direction.RIGHT, man) else this
 
         Action.UP_STAIRS ->if(man.DetectIfisStairs(stairs) && man.speed.isZero()) newStateMove(Direction.UP, man) else this
 
@@ -92,10 +96,6 @@ fun Game.newStateJump(direction: Direction, man: Man): Game {
  * @receiver the current game.
  * @return the game after the next frame.
  */
-
-//TESTE COMMIT
-
-//test COMMIT 2
 
 fun Game.stepFrame(): Game {
     //println(man)

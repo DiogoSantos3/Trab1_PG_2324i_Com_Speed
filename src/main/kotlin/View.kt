@@ -75,14 +75,18 @@ fun Canvas.drawGame(game: Game) {
 /**
  * Draws the man in canvas according to the direction he is facing.
  */
-/*
+
+/**
+ * Draws the man in canvas according to the direction he is facing.
+ */
+
 fun Canvas.drawMan(m: Man) {
     val sprite = when(m.faced) {
         Direction.LEFT ->
-            if(m.speed.dx!=0){
-                Sprite(2,2,2)
+            if (m.speed.dx!=0) {
+                Sprite(2,4,2)
             }
-            else{
+            else {
                 Sprite(2,3,2)
             }
         Direction.RIGHT ->
@@ -102,14 +106,12 @@ fun Canvas.drawMan(m: Man) {
     }
     drawSprite(m.pos, sprite)
 }
-*/
-fun Canvas.drawMan(m: Man) {
+
+/*fun Canvas.drawMan(m: Man) {
     val sprite = when(m.faced) {
         Direction.LEFT -> Sprite(2,3,2)
-
-        Direction.RIGHT -> Sprite(0, 3, 2)
-
-        Direction.UP, Direction.DOWN -> Sprite(4, 1, 2)
+        Direction.RIGHT -> Sprite(0,4,2)
+        Direction.UP, Direction.DOWN -> Sprite(4,0,2)
     }
     drawSprite(m.pos, sprite)
-}
+}*/

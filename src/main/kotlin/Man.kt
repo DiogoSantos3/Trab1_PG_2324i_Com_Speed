@@ -40,6 +40,8 @@ fun Man.gravity(): Man {
     return Man(pos.plus(speed= Speed(this.speed.dx,CLIMBING_SPEED)).limitToArea(MAX_X,MAX_Y), faced,this.stateJump,speed.stopIfInCell(pos.plus(speed)),0)
 }
 
+
+
 fun Man.jump(): Man {
     val newDyTemp = this.speed.dy - AC_JUMP
     val newYTemp = this.pos.y - this.speed.dy
@@ -68,8 +70,6 @@ fun Man.DetectIfisInsideFloor(floor:List<Cell>):Boolean {
         else -> false
     }
 }
-
-
 fun Man.Food(food:List<Cell>):Boolean{
     return food.any { pos.toCell().col == it.col && pos.toCell().row == it.row}
 }
