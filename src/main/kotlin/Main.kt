@@ -10,7 +10,6 @@ private const val FRAME_TIME = 30 // in milliseconds
 fun main() {
     onStart {
         val arena = createCanvas()
-        //CRIA UM OBJETO "GAME"
         var game = loadGame("level1.txt")
         arena.onKeyPressed { key ->
             if (key.code == ESCAPE_CODE) arena.close()
