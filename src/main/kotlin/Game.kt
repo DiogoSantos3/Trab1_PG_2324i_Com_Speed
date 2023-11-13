@@ -45,11 +45,11 @@ fun Game.doAction(action: Action?): Game {
     return when (action) {
         //The function isStopped() is used to prevent man getting a new speed while moving, preventing it from misalignment of the grid (Used in all movements).
         Action.WALK_LEFT -> if (man.pos.x==0) this
-            else if (man.speed.isZero() && !man.copy(Point(man.pos.x+CELL_WIDTH,man.pos.y)).DetectIfisInsideFloor(floor))
+            else if (man.speed.isZero() && !man.copy(Point(man.pos.x+CELL_WIDTH,man.pos.y)).DetectIfisInsideFloor(floor) && man.DetectIfisFloororstrair(floor,stairs)==true)
             newStateMove(Direction.LEFT, man) else this
 
         Action.WALK_RIGHT -> if (man.pos.x==MAX_X) this
-            else if(man.speed.isZero() && !man.copy(Point(man.pos.x+CELL_WIDTH,man.pos.y)).DetectIfisInsideFloor(floor))
+            else if(man.speed.isZero() && !man.copy(Point(man.pos.x+CELL_WIDTH,man.pos.y)).DetectIfisInsideFloor(floor) && man.DetectIfisFloororstrair(floor,stairs)==true)
                 newStateMove(Direction.RIGHT, man) else this
 
         Action.UP_STAIRS ->if(man.DetectIfisStairs(stairs) && man.speed.isZero()) newStateMove(Direction.UP, man) else this
@@ -57,7 +57,7 @@ fun Game.doAction(action: Action?): Game {
         Action.DOWN_STAIRS ->if(man.DetectIfisStairs(stairs) && !man.DetectIfisFloor(floor) && man.speed.isZero()) newStateMove(Direction.DOWN, man) else this
 
         Action.JUMP -> {
-            if ( man.speed.isZero() && man.stateJump==false)
+            if ( man.speed.isZero() && man.stateJump==false && man.DetectIfisFloororstrair(floor,stairs)==true)
                 return newStateJump(man.faced,man)
             this
         }
