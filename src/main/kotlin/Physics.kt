@@ -18,7 +18,7 @@ data class Point(val x: Int, val y: Int)
  * @return a new point with the coordinates limited to the area.
  */
 
-//FAZ OS LIMITES DA ARENA
+//Create the limits of the arena
 fun Point.limitToArea(xMax: Int, yMax: Int): Point =
     if (x in 1..xMax && y in 0..yMax) this
     else Point( x.coerceIn(0, xMax), y.coerceIn(0, yMax))
@@ -36,7 +36,6 @@ data class Cell(val row: Int, val col: Int)
  * @receiver the point to convert.
  * @return the cell corresponding to the point.
  */
-//COORDENADAS ABSOLUTAS
 fun Point.toCell() = Cell(y / CELL_HEIGHT, x / CELL_WIDTH)
 
 /**
@@ -103,7 +102,7 @@ operator fun Point.minus(speed: Speed) = Point(x - speed.dx, y - speed.dy)
  * @receiver the current speed.
  * @return the new speed with zero components if the position is synchronized with one cell.
  */
-//SE JÁ ESTIVER NA CÉLULA, PARA
+
 fun Speed.stopIfInCell(pos: Point): Speed {
     val newDx = if (pos.x % CELL_WIDTH == 0) 0 else dx
     val newDy = if (pos.y % CELL_HEIGHT == 0) 0 else dy

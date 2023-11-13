@@ -106,12 +106,3 @@ fun Canvas.drawMan(m: Man) {
     }
     drawSprite(m.pos, sprite)
 }
-
-/*fun Canvas.drawMan(m: Man) {
-    val sprite = when(m.faced) {
-        Direction.LEFT -> Sprite(2,3,2)
-        Direction.RIGHT -> Sprite(0,4,2)
-        Direction.UP, Direction.DOWN -> Sprite(4,0,2)
-    }
-    drawSprite(m.pos, sprite)
-}*/
