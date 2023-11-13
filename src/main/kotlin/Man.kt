@@ -40,7 +40,7 @@ fun Man.gravity(): Man {
 }
 
 
-
+//Bernardo
 fun Man.jump(): Man {
     val newDyTemp = this.speed.dy - AC_JUMP
     val newYTemp = this.pos.y - this.speed.dy
@@ -64,6 +64,8 @@ fun Man.detectIfisFloor(floor:List<Cell>):Boolean {
         else -> false
     }
 }
+
+//Pinto
 fun Man.detectIfisFloorOrStrair(floor:List<Cell>, stairs:List<Cell>):Boolean {
     return when {
         floor.any { pos.toCell().col == it.col && pos.toCell().row == it.row - 1 } || stairs.any { pos.toCell().col == it.col && pos.toCell().row == it.row}-> true
@@ -78,21 +80,21 @@ fun Man.detectIfisInsideFloor(floor:List<Cell>):Boolean {
         else -> false
     }
 }
-
+//Pinto
 fun Man.food(food:List<Cell>):Boolean{
     return food.any { pos.toCell().col == it.col && pos.toCell().row == it.row}
 }
-
+//Pinto
 fun Man.removeFood(food:List<Cell>): List<Cell> {
     val manPos = this.pos.toCell()
     val foodList = food
     return foodList - manPos
 }
-
+//Pinto
 fun Man.eggs(eggs:List<Cell>):Boolean{
     return eggs.any { pos.toCell().col == it.col && pos.toCell().row == it.row}
 }
-
+//Pinto
 fun Man.removeEggs(eggs:List<Cell>): List<Cell> {
     val manPos = this.pos.toCell()
     val eggsList = eggs
