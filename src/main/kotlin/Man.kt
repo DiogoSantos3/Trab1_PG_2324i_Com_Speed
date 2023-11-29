@@ -96,3 +96,11 @@ fun Man.removeEggs(eggs:List<Cell>): List<Cell> {
     val eggsList = eggs
     return eggsList - manPos
 }
+
+fun Man.end(eggs:List<Cell>, food:List<Cell>):Boolean{
+        if (eggs.isEmpty() && food.isEmpty()){
+            createCanvas().close()
+            return true
+        }
+    return false
+}

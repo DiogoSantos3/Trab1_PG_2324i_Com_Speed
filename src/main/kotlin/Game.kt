@@ -15,7 +15,9 @@ data class Game(
     val floor: List<Cell>,
     val stairs: List<Cell>,
     val eggs: List<Cell>,
-    val food: List<Cell>
+    val food: List<Cell>,
+    val score: Int,
+    val time: Int,
 )
 
 /**
@@ -31,6 +33,8 @@ fun loadGame(fileName: String) :Game {
         stairs = cells.ofType(CellType.STAIR),
         eggs = cells.ofType(CellType.EGG),
         food = cells.ofType(CellType.FOOD),
+        score = 0,
+        time = 2666
     )
 }
 
@@ -62,6 +66,7 @@ fun Game.doAction(action: Action?): Game {
                 return newStateJump(man.faced,man.copy(Point(man.pos.x,man.pos.y)))
             this
         }
+
         else -> this
     }
 }
@@ -100,33 +105,38 @@ fun Game.newStateJump(direction: Direction, man: Man): Game {
 fun Game.stepFrame(): Game {
     println(man)
     return when{
+        (man.end(eggs, food)) ->
+            Game(man, floor, stairs, eggs, food, score, time)
+
         (man.jumpCycle > 0 && man.food(food) && (man.jumpCycle==16 || !man.detectIfisFloor(floor))) ->
-            Game(man.copy(jumpCycle = man.jumpCycle - 1).jump(), floor, stairs, eggs, man.removeFood(food))
+            Game(man.copy(jumpCycle = man.jumpCycle - 1).jump(), floor, stairs, eggs, man.removeFood(food), score+50, time)
 
         (man.jumpCycle > 0 && man.eggs(eggs) && (man.jumpCycle==16 || !man.detectIfisFloor(floor))) ->
-            Game(man.copy(jumpCycle = man.jumpCycle - 1).jump(), floor, stairs, man.removeEggs(eggs), food)
+            Game(man.copy(jumpCycle = man.jumpCycle - 1).jump(), floor, stairs, man.removeEggs(eggs), food, score+100, time)
 
         (man.jumpCycle > 0 && (man.jumpCycle==16 || !man.detectIfisFloor(floor))) ->
-            Game(man.copy(jumpCycle = man.jumpCycle - 1).jump(), floor, stairs, eggs, food)
+            Game(man.copy(jumpCycle = man.jumpCycle - 1).jump(), floor, stairs, eggs, food, score, time)
 
         (man.detectIfisStairs(stairs) && man.speed.isZero() && !man.stateJump) ->
-            Game(man.moveUpDown(), floor, stairs, eggs, food)
+            Game(man.moveUpDown(), floor, stairs, eggs, food, score, time)
 
         (!man.detectIfisStairs(stairs) && !man.detectIfisFloor(floor)) ->
-            Game(man.gravity(), floor, stairs, eggs, food)
+            Game(man.gravity(), floor, stairs, eggs, food, score, time)
 
         (man.stateJump && !man.detectIfisStairs(stairs)) ->
-            Game(man.copy(pos=Point(man.pos.x,man.pos.y).toCell().toPoint(),stateJump = false, speed = Speed(0, 0)), floor, stairs, eggs, food)
+            Game(man.copy(pos=Point(man.pos.x,man.pos.y).toCell().toPoint(),stateJump = false, speed = Speed(0, 0)), floor, stairs, eggs, food, score, time)
 
         (man.eggs(eggs)) ->
-            Game (man.move(), floor, stairs , man.removeEggs(eggs), food)
+            Game (man.move(), floor, stairs , man.removeEggs(eggs), food, score+100, time)
 
         (man.food(food)) ->
-            Game (man.move(), floor, stairs , eggs, man.removeFood(food))
+            Game (man.move(), floor, stairs , eggs, man.removeFood(food),score+50, time)
 
         (!man.detectIfisStairs(stairs) && man.detectIfisFloor(floor)) ->
-            Game(man.move(), floor, stairs, eggs, food)
+            Game(man.move(), floor, stairs, eggs, food, score, time)
 
-        else ->  Game(man.move(), floor, stairs, eggs, food)
+        //(score == 1500) -> createCanvas().close()
+
+        else ->  Game(man.move(), floor, stairs, eggs, food, score, time)
     }
 }

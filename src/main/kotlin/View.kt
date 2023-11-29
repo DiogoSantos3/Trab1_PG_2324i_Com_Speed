@@ -59,6 +59,29 @@ fun Canvas.drawSprite(pos: Point, s: Sprite) {
     )
 }
 
+fun Canvas.drawScore(num:Int){
+    val x = 50
+    val y = 60
+    drawText(
+        x,
+        y,
+        "Score : $num",
+        YELLOW,
+    )
+}
+
+fun Canvas.drawTime(num:Int){
+    val x = 717
+    val y = 60
+    drawText(
+        x,
+        y,
+        "Time : $num",
+        YELLOW,
+    )
+}
+
+
 /**
  * Draw all the elements of the game.
  */
@@ -69,6 +92,9 @@ fun Canvas.drawGame(game: Game) {
     game.stairs.forEach { drawSprite(it.toPoint(), Sprite(0,1)) }
     game.eggs.forEach { drawSprite(it.toPoint(), Sprite(1,1)) }
     game.food.forEach { drawSprite(it.toPoint(), Sprite(1,0)) }
+
+    drawScore(game.score)
+    drawTime(game.time)
     drawMan(game.man)
 }
 
