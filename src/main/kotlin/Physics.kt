@@ -1,4 +1,3 @@
-
 // The code of this module depends only on the constants: CELL_WIDTH and CELL_HEIGHT
 // This module defines the types: Point, Cell, Direction and Speed
 
@@ -21,7 +20,7 @@ data class Point(val x: Int, val y: Int)
 //Create the limits of the arena
 fun Point.limitToArea(xMax: Int, yMax: Int): Point =
     if (x in 1..xMax && y in 0..yMax) this
-    else Point( x.coerceIn(0, xMax), y.coerceIn(0, yMax))
+    else Point(x.coerceIn(0, xMax), y.coerceIn(0, yMax))
 
 /**
  * Represents a cell in the arena grid.
@@ -53,7 +52,7 @@ fun Cell.toPoint() = Point(col * CELL_WIDTH, row * CELL_HEIGHT)
  * @property dCol the horizontal displacement
  */
 enum class Direction(val dRow: Int, val dCol: Int) {
-    LEFT(0,-1), RIGHT(0,+1), UP(-1,0), DOWN(+1,0)
+    LEFT(0, -1), RIGHT(0, +1), UP(-1, 0), DOWN(+1, 0)
 }
 
 /**
@@ -106,5 +105,5 @@ operator fun Point.minus(speed: Speed) = Point(x - speed.dx, y - speed.dy)
 fun Speed.stopIfInCell(pos: Point): Speed {
     val newDx = if (pos.x % CELL_WIDTH == 0) 0 else dx
     val newDy = if (pos.y % CELL_HEIGHT == 0) 0 else dy
-    return if (newDx!=dx || newDy!=dy) Speed(newDx, newDy) else this
+    return if (newDx != dx || newDy != dy) Speed(newDx, newDy) else this
 }

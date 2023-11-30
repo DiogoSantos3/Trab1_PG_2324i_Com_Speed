@@ -7,7 +7,7 @@ import kotlin.io.path.readLines
  * @property symbol the symbol used to represent the cell in the level file.
  */
 enum class CellType(val symbol: Char) {
-    MAN('M'), FLOOR('#'), STAIR('H') , EGG('e'), FOOD('f'), HEN('G')
+    MAN('M'), FLOOR('#'), STAIR('H'), EGG('e'), FOOD('f'), HEN('G')
 }
 
 /**
@@ -22,7 +22,7 @@ data class CellContent(val type: CellType, val cell: Cell)
  * @param fileName the name of the file in resources folder.
  * @return the list of cells in the level.
  */
-fun loadLevel(fileName: String) :List<CellContent> {
+fun loadLevel(fileName: String): List<CellContent> {
     var path = Path("build/resources/main/$fileName")
     if (!path.exists()) path = Path(fileName)
     val lines = path.readLines()

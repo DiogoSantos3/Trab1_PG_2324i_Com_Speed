@@ -1,4 +1,5 @@
 import pt.isel.canvas.*
+import javax.xml.crypto.Data
 
 // Dimensions of the sprites in the images files
 // Floor, Egg, Food and Stair are 1x1 ; Man is 1x2 ; Hen is 1x3 or 2x2
@@ -23,8 +24,8 @@ fun createCanvas() = Canvas(GRID_WIDTH * CELL_WIDTH, GRID_HEIGHT * CELL_HEIGHT, 
  * Draw horizontal and vertical lines of the grid in arena.
  */
 fun Canvas.drawGridLines() {
-    (0 ..< width step CELL_WIDTH).forEach { x -> drawLine(x, 0, x, height, WHITE, 1) }
-    (0 ..< height step CELL_HEIGHT).forEach { y -> drawLine(0, y, width, y, WHITE, 1) }
+    (0..<width step CELL_WIDTH).forEach { x -> drawLine(x, 0, x, height, WHITE, 1) }
+    (0..<height step CELL_HEIGHT).forEach { y -> drawLine(0, y, width, y, WHITE, 1) }
 }
 
 /**
@@ -53,32 +54,31 @@ fun Canvas.drawSprite(pos: Point, s: Sprite) {
     drawImage(
         fileName = "chuckieEgg|$x,$y,$w,$h",
         xLeft = pos.x,
-        yTop = pos.y - (s.height-1) * CELL_HEIGHT,
+        yTop = pos.y - (s.height - 1) * CELL_HEIGHT,
         width = CELL_WIDTH * s.width,
         height = CELL_HEIGHT * s.height
     )
 }
 
-fun Canvas.drawScore(num:Int){
+fun Canvas.drawScore(num: Int) {
     val x = 50
     val y = 60
-    drawText(x, y, "Score : $num", YELLOW,40)
+    drawText(x, y, "Score : $num", YELLOW, 40)
 }
 
-fun Canvas.drawTime(num:Int){
+fun Canvas.drawTime(num: Int) {
     val x = 717
     val y = 60
-    drawText(x, y, "Time : $num", YELLOW,40)
+    drawText(x, y, "Time : $num", YELLOW, 40)
 }
 
-fun Canvas.endGame(eggs:List<Cell>, food:List<Cell>,game: Game){
-    val x= 180
-    val y= 400
+fun Canvas.endGame(game: Game) {
+    val x = 180
+    val y = 400
     when {
-        (eggs.isEmpty() && food.isEmpty()) -> drawText(x, y, "YOU WON", GREEN,120)
+        (game.eggs.isEmpty() && game.food.isEmpty()) -> drawText(x, y, "YOU WON", GREEN, 120)
 
-
-        (game.time == 0) -> drawText(x, y,"YOU LOSE", RED,120)
+        (game.time == 0) -> drawText(x, y, "YOU LOSE", RED, 120)
     }
 }
 
@@ -89,15 +89,15 @@ fun Canvas.endGame(eggs:List<Cell>, food:List<Cell>,game: Game){
 fun Canvas.drawGame(game: Game) {
     erase()
     drawGridLines()
-    game.floor.forEach { drawSprite(it.toPoint(), Sprite(0,0)) }
-    game.stairs.forEach { drawSprite(it.toPoint(), Sprite(0,1)) }
-    game.eggs.forEach { drawSprite(it.toPoint(), Sprite(1,1)) }
-    game.food.forEach { drawSprite(it.toPoint(), Sprite(1,0)) }
+    game.floor.forEach { drawSprite(it.toPoint(), Sprite(0, 0)) }
+    game.stairs.forEach { drawSprite(it.toPoint(), Sprite(0, 1)) }
+    game.eggs.forEach { drawSprite(it.toPoint(), Sprite(1, 1)) }
+    game.food.forEach { drawSprite(it.toPoint(), Sprite(1, 0)) }
 
     drawScore(game.score)
     drawTime(game.time)
     drawMan(game.man)
-    endGame(game.eggs,game.food,game)
+    endGame(game)
 }
 
 /**
@@ -107,29 +107,28 @@ fun Canvas.drawGame(game: Game) {
 /**
  * Draws the man in canvas according to the direction he is facing.
  */
+
+
+
+fun Sprite.changeImage(): Sprite {
+    var newSprite = this
+    for (step in 1..4) {
+        if (step < 2) {
+            newSprite=Sprite(this.row,this.col+1,this.height)
+        } else {
+            newSprite=Sprite(this.row,this.col-1,this.height)
+        }
+
+    }
+
+    return newSprite
+}
+
 fun Canvas.drawMan(m: Man) {
-    val sprite = when(m.faced) {
-        Direction.LEFT ->
-            if (m.speed.dx!=0) {
-                Sprite(2,4,2)
-            }
-            else {
-                Sprite(2,3,2)
-            }
-        Direction.RIGHT ->
-            if(m.speed.dx!=0) {
-                Sprite(0, 4, 2)
-            }
-            else{
-                Sprite(0, 3, 2)
-            }
-        Direction.UP, Direction.DOWN ->
-            if(m.speed.dy!=0) {
-                Sprite(4, 1, 2)
-            }
-            else{
-                Sprite(4, 0, 2)
-            }
+    val sprite = when (m.faced) {
+        Direction.LEFT -> Sprite(2, 3, 2)
+        Direction.RIGHT -> Sprite(0, 3, 2)
+        Direction.UP, Direction.DOWN -> Sprite(4, 0, 2)
     }
     drawSprite(m.pos, sprite)
 }
