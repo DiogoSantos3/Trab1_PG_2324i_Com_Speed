@@ -198,8 +198,5 @@ fun Game.stepFrame(): Game {
 
         }
     }
-    //else if (isOver()){
-        //Game(man, floor, stairs, eggs, food, score + time, time)
-    //}
-    return this
+    return this.copy(score = score+time,time =0) // When all the food and eggs are
 }
