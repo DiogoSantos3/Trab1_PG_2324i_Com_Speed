@@ -198,5 +198,6 @@ fun Game.stepFrame(): Game {
 
         }
     }
-    return this.copy(score = score+time,time =0) // When all the food and eggs are
+    // When all the food and eggs are eaten the game ends and the remaing time is added to score
+    return this.copy(score = score+time,time =0)
 }
