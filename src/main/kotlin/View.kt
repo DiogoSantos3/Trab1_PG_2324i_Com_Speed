@@ -93,7 +93,7 @@ fun Canvas.endGame(game: Game): Int{
  */
 fun Canvas.drawGame(game: Game) {
     erase()
-    drawGridLines()
+    //drawGridLines()
     game.floor.forEach { drawSprite(it.toPoint(), Sprite(0, 0)) }
     game.stairs.forEach { drawSprite(it.toPoint(), Sprite(0, 1)) }
     game.eggs.forEach { drawSprite(it.toPoint(), Sprite(1, 1)) }
@@ -115,19 +115,8 @@ fun Canvas.drawGame(game: Game) {
 
 
 
-fun Sprite.changeImage(): Sprite {
-    var newSprite = this
-    for (step in 1..4) {
-        if (step < 2) {
-            newSprite=Sprite(this.row,this.col+1,this.height)
-        } else {
-            newSprite=Sprite(this.row,this.col-1,this.height)
-        }
 
-    }
 
-    return newSprite
-}
 
 fun Canvas.drawMan(m: Man) {
     val sprite = when (m.faced) {

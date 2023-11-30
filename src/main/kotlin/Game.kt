@@ -52,8 +52,7 @@ fun loadGame(fileName: String): Game {
  */
 //When the key is clicked, the coordinates of the man are updated using the newStateMove and newStateJump functions.
 fun Game.doAction(action: Action?): Game {
-
-    return when (action) {
+     return when (action) {
         //The function isStopped() is used to prevent man getting a new speed while moving, preventing it from misalignment of the grid (Used in all movements).
         Action.WALK_LEFT -> if (man.pos.x == 0) this
         else if (man.speed.isZero() && !man.copy(Point(man.pos.x - CELL_WIDTH, man.pos.y))
@@ -88,10 +87,12 @@ fun Game.doAction(action: Action?): Game {
 
         else -> this
     }
+    return this
 }
 
 fun Game.isOver(): Boolean = if (time == 0 || this.eggs.isEmpty() && this.food.isEmpty() ) true else false
 
+//fun Game.addTimetoScore():Game = if(isOver()) this.copy(score = score+time) else this
 //Create a new state of motion
 fun Game.newStateMove(direction: Direction, man: Man): Game {
     val updatedMan = when (direction) {
@@ -128,6 +129,8 @@ fun Game.newStateJump(direction: Direction, man: Man): Game {
  * @return the game after the next frame.
  */
 //Every 30ms the game is updated according to the conditions
+
+
 
 
 fun Game.stepFrame(): Game {
@@ -185,8 +188,10 @@ fun Game.stepFrame(): Game {
                     ), floor, stairs, eggs, food, score, time = time - 1
                 )
 
-            (man.eggs(eggs)) ->
+            (man.eggs(eggs)) -> {
+
                 Game(man.move(), floor, stairs, man.removeEggs(eggs), food, score + 100, time = time - 1)
+            }
 
             (man.food(food)) ->
                 Game(man.move(), floor, stairs, eggs, man.removeFood(food), score + 50, time = time - 1)
@@ -199,5 +204,5 @@ fun Game.stepFrame(): Game {
         }
     }
     // When all the food and eggs are eaten the game ends and the remaing time is added to score
-    return this.copy(score = score+time,time =0)
+    return this.copy(score=score+time, time = 0)
 }
