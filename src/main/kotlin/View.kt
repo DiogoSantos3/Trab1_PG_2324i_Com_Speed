@@ -62,24 +62,29 @@ fun Canvas.drawSprite(pos: Point, s: Sprite) {
 
 fun Canvas.drawScore(num: Int) {
     val x = 50
-    val y = 60
+    val y = 64
     drawText(x, y, "Score : $num", YELLOW, 40)
 }
 
 fun Canvas.drawTime(num: Int) {
-    val x = 717
-    val y = 60
+    val x = 673
+    val y = 64
     drawText(x, y, "Time : $num", YELLOW, 40)
 }
 
-fun Canvas.endGame(game: Game) {
+fun Canvas.endGame(game: Game): Int{
     val x = 180
     val y = 400
     when {
-        (game.eggs.isEmpty() && game.food.isEmpty()) -> drawText(x, y, "YOU WON", GREEN, 120)
+        (game.eggs.isEmpty() && game.food.isEmpty()) -> {
+            drawText(x, y, "YOU WON", GREEN, 120)
+            //game.score + game.time
+            //return game.score + game.time
+        }
 
         (game.time == 0) -> drawText(x, y, "YOU LOSE", RED, 120)
     }
+    return 0
 }
 
 

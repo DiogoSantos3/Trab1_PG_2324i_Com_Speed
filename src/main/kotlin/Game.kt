@@ -133,6 +133,10 @@ fun Game.newStateJump(direction: Direction, man: Man): Game {
 fun Game.stepFrame(): Game {
     if (!isOver()) {
         return when {
+
+            //(this.eggs.isEmpty() && this.food.isEmpty()) ->
+                //Game(man, floor, stairs, eggs, food, score = score + time, time)
+
             (man.jumpCycle > 0 && man.food(food) && (man.jumpCycle == 16 || !man.detectIfisFloor(floor))) ->
                 Game(
                     man.copy(jumpCycle = man.jumpCycle - 1).jump(),
@@ -194,5 +198,8 @@ fun Game.stepFrame(): Game {
 
         }
     }
+    //else if (isOver()){
+        //Game(man, floor, stairs, eggs, food, score + time, time)
+    //}
     return this
 }
