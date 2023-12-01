@@ -38,27 +38,6 @@ fun Canvas.drawGridLines() {
  */
 data class Sprite(val row: Int, val col: Int, val height: Int = 1, val width: Int = 1)
 
-/**
- * Draw a sprite in a position of the canvas.
- * @param pos the position in the canvas (top-left of base cell).
- * @param spriteRow the row of the sprite in the image.
- * @param spriteCol the column of the sprite in the image.
- * @param spriteHeight the height of the sprite in the image.
- * @param spriteWidth the width of the sprite in the image.
- */
-fun Canvas.drawSprite(pos: Point, s: Sprite) {
-    val x = s.col * SPRITE_WIDTH + s.col + 1  // in pixels
-    val y = s.row * SPRITE_HEIGHT + s.row + s.height
-    val h = s.height * SPRITE_HEIGHT
-    val w = s.width * SPRITE_WIDTH
-    drawImage(
-        fileName = "chuckieEgg|$x,$y,$w,$h",
-        xLeft = pos.x,
-        yTop = pos.y - (s.height - 1) * CELL_HEIGHT,
-        width = CELL_WIDTH * s.width,
-        height = CELL_HEIGHT * s.height
-    )
-}
 
 fun Canvas.drawScore(num: Int) {
     val x = 50
@@ -105,24 +84,79 @@ fun Canvas.drawGame(game: Game) {
     endGame(game)
 }
 
+
+/**
+ * Draw a sprite in a position of the canvas.
+ * @param pos the position in the canvas (top-left of base cell).
+ * @param spriteRow the row of the sprite in the image.
+ * @param spriteCol the column of the sprite in the image.
+ * @param spriteHeight the height of the sprite in the image.
+ * @param spriteWidth the width of the sprite in the image.
+ */
+
+fun Canvas.drawSprite(pos: Point, s: Sprite) {
+
+
+    val x = s.col * SPRITE_WIDTH + s.col + 1  // in pixels
+    val y = s.row * SPRITE_HEIGHT + s.row + s.height
+
+
+    val h = s.height * SPRITE_HEIGHT
+    val w = s.width * SPRITE_WIDTH
+    drawImage(
+        fileName = "chuckieEgg|$x,$y,$w,$h",
+        xLeft = pos.x,
+        yTop = pos.y - (s.height - 1) * CELL_HEIGHT,
+        width = CELL_WIDTH * s.width,
+        height = CELL_HEIGHT * s.height
+    )
+}
 /**
  * Draws the man in canvas according to the direction he is facing.
  */
-
-/**
- * Draws the man in canvas according to the direction he is facing.
- */
-
-
-
-
-
 
 fun Canvas.drawMan(m: Man) {
-    val sprite = when (m.faced) {
-        Direction.LEFT -> Sprite(2, 3, 2)
-        Direction.RIGHT -> Sprite(0, 3, 2)
-        Direction.UP, Direction.DOWN -> Sprite(4, 0, 2)
+    val sprite = when(m.faced) {
+        Direction.LEFT ->
+            if (m.moveCicle!= 0) {
+                if (m.moveCicle % 2 ==1 ) {
+                    Sprite(2, 4, 2)
+                }
+                else Sprite(2, 2, 2)
+            }
+        else {
+                Sprite(2, 3, 2) }//Parado
+
+        Direction.RIGHT ->
+            if (m.moveCicle!= 0) {
+                if (m.moveCicle % 2 ==1 ) {
+                    Sprite(0, 4, 2)
+                }
+                else Sprite(0, 2, 2)
+            }
+            else {
+                Sprite(0, 3, 2) }//Parado
+
+        Direction.UP, Direction.DOWN ->
+            if (m.moveCicle!= 0) {
+                when (m.moveCicle) {
+                    1-> Sprite(4, 2, 2)
+                    2-> Sprite(4, 1, 2)
+                    3-> Sprite(4, 3, 2)
+
+                    else -> Sprite(4, 4, 2)
+                }
+            }
+            else {
+                Sprite(4, 0, 2) }//Parado
     }
     drawSprite(m.pos, sprite)
+}/*
+if (m.moveCicle!= 0) {
+    if (m.moveCicle % 2 ==1 ) {
+        Sprite(4, 1, 2)
+    }
+    else Sprite(4, 4, 2)
 }
+else {
+    Sprite(4, 0, 2) }//Parado*/

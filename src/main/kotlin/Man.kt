@@ -13,7 +13,7 @@ const val MAX_Y = (GRID_HEIGHT - 1) * CELL_HEIGHT
  * @property pos is the position in the board.
  * @property faced the direction the man is facing
  */
-data class Man(val pos: Point, val faced: Direction, val stateJump: Boolean, val speed: Speed, val jumpCycle: Int)
+data class Man(val pos: Point, val faced: Direction, val stateJump: Boolean, val speed: Speed, val jumpCycle: Int,val moveCicle:Int)
 
 /**
  * Creates the Man in the cell
@@ -24,16 +24,17 @@ fun createMan(cell: Cell) = Man(
     false,
     speed = Speed(0, 0),
     jumpCycle = 0,
+    moveCicle = 0
 )
 
 //Update the X-coordinate by adding an acceleration on the X-axis
 fun Man.move(): Man {
-    return Man(pos.plus(speed).limitToArea(MAX_X, MAX_Y), faced, this.stateJump, speed.stopIfInCell(pos.plus(speed)), 0)
+    return Man(pos.plus(speed).limitToArea(MAX_X, MAX_Y), faced, this.stateJump, speed.stopIfInCell(pos.plus(speed)), 0,this.moveCicle)
 }
 
 //Update the Y-coordinate by adding an acceleration on the Y-axis
 fun Man.moveUpDown(): Man {
-    return Man(pos.plus(speed).limitToArea(MAX_X, MAX_Y), faced, this.stateJump, speed.stopIfInCell(pos.plus(speed)), 0)
+    return Man(pos.plus(speed).limitToArea(MAX_X, MAX_Y), faced, this.stateJump, speed.stopIfInCell(pos.plus(speed)), 0,this.moveCicle)
 }
 
 //Add an acceleration on the Y-axis that causes the man to descend
@@ -43,6 +44,7 @@ fun Man.gravity(): Man {
         faced,
         this.stateJump,
         speed.stopIfInCell(pos.plus(speed)),
+        0,
         0
     )
 }
@@ -62,7 +64,8 @@ fun Man.jump(): Man {
         this.faced,
         true,
         speed = Speed(this.speed.dx, newDyTemp),
-        this.jumpCycle
+        this.jumpCycle,
+        this.moveCicle
     )
 }
 
