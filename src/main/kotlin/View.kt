@@ -60,7 +60,6 @@ fun Canvas.endGame(game: Game): Int{
             //game.score + game.time
             //return game.score + game.time
         }
-
         (game.time == 0) -> drawText(x, y, "YOU LOSE", RED, 120)
     }
     return 0
@@ -118,37 +117,42 @@ fun Canvas.drawSprite(pos: Point, s: Sprite) {
 fun Canvas.drawMan(m: Man) {
     val sprite = when(m.faced) {
         Direction.LEFT ->
-            if (m.moveCicle!= 0) {
-                if (m.moveCicle % 2 ==1 ) {
-                    Sprite(2, 4, 2)
+                when (m.animationCicle) {
+                    1-> Sprite(2, 4, 2)
+                    2-> Sprite(2,3,2)
+                    3->Sprite(2,2,2)
+                    4->Sprite(2,3,2)
+                    5->Sprite(2, 4, 2)
+                    else-> Sprite(2,3,2)
                 }
-                else Sprite(2, 2, 2)
-            }
-        else {
-                Sprite(2, 3, 2) }//Parado
 
         Direction.RIGHT ->
-            if (m.moveCicle!= 0) {
-                if (m.moveCicle % 2 ==1 ) {
-                    Sprite(0, 4, 2)
-                }
-                else Sprite(0, 2, 2)
+            when (m.animationCicle) {
+                1-> Sprite(0, 4, 2)
+                2-> Sprite(0,3,2)
+                3->Sprite(0,2,2)
+                4->Sprite(0,3,2)
+                5->Sprite(0, 4, 2)
+                else-> Sprite(0,3,2)
             }
-            else {
-                Sprite(0, 3, 2) }//Parado
 
-        Direction.UP, Direction.DOWN ->
-            if (m.moveCicle!= 0) {
-                when (m.moveCicle) {
-                    1-> Sprite(4, 2, 2)
-                    2-> Sprite(4, 1, 2)
-                    3-> Sprite(4, 3, 2)
-
-                    else -> Sprite(4, 4, 2)
-                }
+        Direction.UP->
+            when (m.animationCicle) {
+                1-> Sprite(4, 3, 2)
+                2-> Sprite(4, 2, 2)
+                3->Sprite(4, 1, 2)
+                else ->Sprite(4, 0, 2)
             }
-            else {
-                Sprite(4, 0, 2) }//Parado
+
+        Direction.DOWN ->
+            when (m.animationCicle) {
+                1-> Sprite(4, 4, 2)
+                2-> Sprite(4, 3, 2)
+                3-> Sprite(4, 2, 2)
+                4-> Sprite(4, 1, 2)
+                else -> Sprite(4, 0, 2)
+
+            }
     }
     drawSprite(m.pos, sprite)
 }/*
