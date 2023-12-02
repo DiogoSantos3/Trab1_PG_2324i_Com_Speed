@@ -38,27 +38,51 @@ fun Canvas.drawGridLines() {
  */
 data class Sprite(val row: Int, val col: Int, val height: Int = 1, val width: Int = 1)
 
+/**
+ * Draw a sprite in a position of the canvas.
+ * @param pos the position in the canvas (top-left of base cell).
+ * @param spriteRow the row of the sprite in the image.
+ * @param spriteCol the column of the sprite in the image.
+ * @param spriteHeight the height of the sprite in the image.
+ * @param spriteWidth the width of the sprite in the image.
+ */
+fun Canvas.drawSprite(pos: Point, s: Sprite) {
 
+    val x = s.col * SPRITE_WIDTH + s.col + 1  // in pixels
+    val y = s.row * SPRITE_HEIGHT + s.row + s.height
+    val h = s.height * SPRITE_HEIGHT
+    val w = s.width * SPRITE_WIDTH
+    drawImage(
+        fileName = "chuckieEgg|$x,$y,$w,$h",
+        xLeft = pos.x,
+        yTop = pos.y - (s.height - 1) * CELL_HEIGHT,
+        width = CELL_WIDTH * s.width,
+        height = CELL_HEIGHT * s.height
+    )
+}
+
+
+//Draw the score we have
 fun Canvas.drawScore(num: Int) {
     val x = 50
     val y = 64
     drawText(x, y, "Score : $num", YELLOW, 40)
 }
 
+//Draw the time we have to finish the game
 fun Canvas.drawTime(num: Int) {
     val x = 673
     val y = 64
     drawText(x, y, "Time : $num", YELLOW, 40)
 }
 
+//Ends the game when there is no food or eggs left or when there is no time left
 fun Canvas.endGame(game: Game): Int{
     val x = 180
     val y = 400
     when {
         (game.eggs.isEmpty() && game.food.isEmpty()) -> {
             drawText(x, y, "YOU WON", GREEN, 120)
-            //game.score + game.time
-            //return game.score + game.time
         }
         (game.time == 0) -> drawText(x, y, "YOU LOSE", RED, 120)
     }
@@ -83,48 +107,22 @@ fun Canvas.drawGame(game: Game) {
     endGame(game)
 }
 
-
-/**
- * Draw a sprite in a position of the canvas.
- * @param pos the position in the canvas (top-left of base cell).
- * @param spriteRow the row of the sprite in the image.
- * @param spriteCol the column of the sprite in the image.
- * @param spriteHeight the height of the sprite in the image.
- * @param spriteWidth the width of the sprite in the image.
- */
-
-fun Canvas.drawSprite(pos: Point, s: Sprite) {
-
-
-    val x = s.col * SPRITE_WIDTH + s.col + 1  // in pixels
-    val y = s.row * SPRITE_HEIGHT + s.row + s.height
-
-
-    val h = s.height * SPRITE_HEIGHT
-    val w = s.width * SPRITE_WIDTH
-    drawImage(
-        fileName = "chuckieEgg|$x,$y,$w,$h",
-        xLeft = pos.x,
-        yTop = pos.y - (s.height - 1) * CELL_HEIGHT,
-        width = CELL_WIDTH * s.width,
-        height = CELL_HEIGHT * s.height
-    )
-}
 /**
  * Draws the man in canvas according to the direction he is facing.
  */
 
 fun Canvas.drawMan(m: Man) {
     val sprite = when(m.faced) {
+        //Animations for Man
         Direction.LEFT ->
-                when (m.animationCicle) {
-                    1-> Sprite(2, 4, 2)
-                    2-> Sprite(2,3,2)
-                    3->Sprite(2,2,2)
-                    4->Sprite(2,3,2)
-                    5->Sprite(2, 4, 2)
-                    else-> Sprite(2,3,2)
-                }
+            when (m.animationCicle) {
+                1-> Sprite(2, 4, 2)
+                2-> Sprite(2,3,2)
+                3->Sprite(2,2,2)
+                4->Sprite(2,3,2)
+                5->Sprite(2, 4, 2)
+                else-> Sprite(2,3,2)//Stopped
+            }
 
         Direction.RIGHT ->
             when (m.animationCicle) {
@@ -133,7 +131,7 @@ fun Canvas.drawMan(m: Man) {
                 3->Sprite(0,2,2)
                 4->Sprite(0,3,2)
                 5->Sprite(0, 4, 2)
-                else-> Sprite(0,3,2)
+                else-> Sprite(0,3,2)//Stopped
             }
 
         Direction.UP->
@@ -141,7 +139,7 @@ fun Canvas.drawMan(m: Man) {
                 1-> Sprite(4, 3, 2)
                 2-> Sprite(4, 2, 2)
                 3->Sprite(4, 1, 2)
-                else ->Sprite(4, 0, 2)
+                else ->Sprite(4, 0, 2)//Stopped
             }
 
         Direction.DOWN ->
@@ -150,17 +148,9 @@ fun Canvas.drawMan(m: Man) {
                 2-> Sprite(4, 3, 2)
                 3-> Sprite(4, 2, 2)
                 4-> Sprite(4, 1, 2)
-                else -> Sprite(4, 0, 2)
+                else -> Sprite(4, 0, 2)//Stopped
 
             }
     }
     drawSprite(m.pos, sprite)
-}/*
-if (m.moveCicle!= 0) {
-    if (m.moveCicle % 2 ==1 ) {
-        Sprite(4, 1, 2)
-    }
-    else Sprite(4, 4, 2)
 }
-else {
-    Sprite(4, 0, 2) }//Parado*/

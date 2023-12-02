@@ -52,25 +52,24 @@ fun loadGame(fileName: String): Game {
  * @receiver the current game.
  * @return the game after the action performed.
  */
+
 //When the key is clicked, the coordinates of the man are updated using the newStateMove and newStateJump functions.
 fun Game.doAction(action: Action?): Game {
     return when (action) {
         //The function isStopped() is used to prevent man getting a new speed while moving, preventing it from misalignment of the grid (Used in all movements).
         Action.WALK_LEFT -> if (man.pos.x == 0) this
-        else if (man.speed.isZero() && !man.copy(Point(man.pos.x - CELL_WIDTH, man.pos.y))
-                .detectIfisInsideFloor(floor) && man.detectIfisFloororstrair(floor, stairs)
-        )
+        else if (man.speed.isZero() && !man.copy(Point(man.pos.x - CELL_WIDTH, man.pos.y)).detectIfisInsideFloor(floor) && man.detectIfisFloororstrair(floor, stairs))
             newStateMove(Direction.LEFT, man) else this
 
         Action.WALK_RIGHT -> if (man.pos.x == MAX_X) this
-        else if (man.speed.isZero() && !man.copy(Point(man.pos.x + CELL_WIDTH, man.pos.y))
-                .detectIfisInsideFloor(floor) && man.detectIfisFloororstrair(floor, stairs)
-        )
+        else if (man.speed.isZero() && !man.copy(Point(man.pos.x + CELL_WIDTH, man.pos.y)).detectIfisInsideFloor(floor) && man.detectIfisFloororstrair(floor, stairs))
             newStateMove(Direction.RIGHT, man) else this
 
-        Action.UP_STAIRS -> if (man.detectIfisStairs(stairs) && man.speed.isZero() && man.copy(Point(man.pos.x, man.pos.y - CELL_HEIGHT * 2)).detectIfisStairs(stairs)) newStateMove(Direction.UP, man) else this
+        Action.UP_STAIRS -> if (man.detectIfisStairs(stairs) && man.speed.isZero() && man.copy(Point(man.pos.x, man.pos.y - CELL_HEIGHT * 2)).detectIfisStairs(stairs))
+            newStateMove(Direction.UP, man) else this
 
-        Action.DOWN_STAIRS -> if (man.detectIfisStairs(stairs) && !man.detectIfisFloor(floor) && man.speed.isZero()) newStateMove(Direction.DOWN, man) else this
+        Action.DOWN_STAIRS -> if (man.detectIfisStairs(stairs) && !man.detectIfisFloor(floor) && man.speed.isZero())
+            newStateMove(Direction.DOWN, man) else this
 
         Action.JUMP -> {
             if (man.speed.isZero() && !man.stateJump && man.detectIfisFloororstrair(floor, stairs))
@@ -83,9 +82,9 @@ fun Game.doAction(action: Action?): Game {
 
 }
 
-fun Game.isOver(): Boolean = if (time == 0 || this.eggs.isEmpty() && this.food.isEmpty()) true else false
+//Function for when the game ends
+fun Game.isOver(): Boolean = time == 0 || this.eggs.isEmpty() && this.food.isEmpty()
 
-//fun Game.addTimetoScore():Game = if(isOver()) this.copy(score = score+time) else this
 //Create a new state of motion
 fun Game.newStateMove(direction: Direction, man: Man): Game {
     val updatedMan = when (direction) {
@@ -102,14 +101,9 @@ fun Game.newStateMove(direction: Direction, man: Man): Game {
 //Create a new state of jump
 fun Game.newStateJump(direction: Direction, man: Man): Game {
     val updatedMan = when (direction) {
-        Direction.RIGHT -> {
-            man.copy(stateJump = true, speed = Speed(MOVE_SPEED, CELL_HEIGHT / 2), jumpCycle = 16)
-        }
 
-        Direction.LEFT -> {
-            man.copy(stateJump = true, speed = Speed(-MOVE_SPEED, CELL_HEIGHT / 2), jumpCycle = 16)
-        }
-
+        Direction.RIGHT -> man.copy(stateJump = true, speed = Speed(MOVE_SPEED, CELL_HEIGHT / 2), jumpCycle = 16)
+        Direction.LEFT -> man.copy(stateJump = true, speed = Speed(-MOVE_SPEED, CELL_HEIGHT / 2), jumpCycle = 16)
         else -> man
     }
     return this.copy(man = updatedMan.copy(faced = direction))
@@ -122,8 +116,6 @@ fun Game.newStateJump(direction: Direction, man: Man): Game {
  * @return the game after the next frame.
  */
 //Every 30ms the game is updated according to the conditions
-
-
 fun Game.stepFrame(): Game {
     if (!isOver()) {
         println(man)
@@ -154,12 +146,11 @@ fun Game.stepFrame(): Game {
             (man.eggs(eggs)) ->
                 Game(man.copy(animationCicle = man.animationCicle - 1).move(), floor, stairs, man.removeEggs(eggs), food, score + 100, time = time - 1,scoreAdded = false)
 
-
             //Man over food
             (man.food(food)) ->
                 Game(man.copy(animationCicle = man.animationCicle - 1).move(), floor, stairs, eggs, man.removeFood(food), score + 50, time = time - 1,scoreAdded = false)
 
-            //Man jumping sem estar nas escadas
+            //Man jumping without standing in stairs
             (man.stateJump && !man.detectIfisStairs(stairs)) ->
                 Game(man.copy(pos = Point(man.pos.x, man.pos.y).toCell().toPoint(), stateJump = false, speed = Speed(0, 0)), floor, stairs, eggs, food, score, time = time - 1,scoreAdded = false)
 
