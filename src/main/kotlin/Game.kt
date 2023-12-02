@@ -153,7 +153,7 @@ fun Game.stepFrame(): Game {
             //Man jumping without standing in stairs
             (man.stateJump && !man.detectIfisStairs(stairs)) ->
                 Game(man.copy(pos = Point(man.pos.x, man.pos.y).toCell().toPoint(), stateJump = false, speed = Speed(0, 0), animationCicle = 2), floor, stairs, eggs, food, score, time = time - 1,scoreAdded = false)
-            //CORREÇÃO TEMPORARIO - NÃO BUGA NAS ESCADAS MAS CAI DA PLATAFORMA NA MESMA
+            //CORREÇÃO TEMPORARIO - NÃO BUGA NAS ESCADAS MAS CAI DA PLATAFORMA NA MESMA -
             (man.stateJump && !man.detectIfisFloor(floor))->
                 Game(man.copy(pos = Point(man.pos.x, man.pos.y).toCell().toPoint(), stateJump = false, speed = Speed(0, 0), animationCicle = 2), floor, stairs, eggs, food, score, time = time - 1,scoreAdded = false)
 
