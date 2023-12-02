@@ -129,7 +129,7 @@ fun Game.stepFrame(): Game {
                 Game(man.copy(jumpCycle = man.jumpCycle - 1).jump(), floor, stairs, man.removeEggs(eggs), food, score + 100, time = time - 1,scoreAdded = false)
 
             //Man jumping
-            (man.jumpCycle > 0 && (man.jumpCycle == 16 || !man.detectIfisFloor(floor))) ->
+            (man.jumpCycle > 0  && (man.jumpCycle == 16 || !man.detectIfisFloor(floor))) ->
                 Game(man.copy(jumpCycle = man.jumpCycle - 1).jump(), floor, stairs, eggs, food, score, time = time - 1,scoreAdded = false)
 
 
@@ -152,7 +152,10 @@ fun Game.stepFrame(): Game {
 
             //Man jumping without standing in stairs
             (man.stateJump && !man.detectIfisStairs(stairs)) ->
-                Game(man.copy(pos = Point(man.pos.x, man.pos.y).toCell().toPoint(), stateJump = false, speed = Speed(0, 0)), floor, stairs, eggs, food, score, time = time - 1,scoreAdded = false)
+                Game(man.copy(pos = Point(man.pos.x, man.pos.y).toCell().toPoint(), stateJump = false, speed = Speed(0, 0), animationCicle = 2), floor, stairs, eggs, food, score, time = time - 1,scoreAdded = false)
+            //CORREÇÃO TEMPORARIO - NÃO BUGA NAS ESCADAS MAS CAI DA PLATAFORMA NA MESMA
+            (man.stateJump && !man.detectIfisFloor(floor))->
+                Game(man.copy(pos = Point(man.pos.x, man.pos.y).toCell().toPoint(), stateJump = false, speed = Speed(0, 0), animationCicle = 2), floor, stairs, eggs, food, score, time = time - 1,scoreAdded = false)
 
             //Man in floor
             (man.animationCicle > 0 && !man.detectIfisStairs(stairs) && man.detectIfisFloor(floor)) ->

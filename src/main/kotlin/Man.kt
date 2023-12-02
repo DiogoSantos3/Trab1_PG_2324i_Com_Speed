@@ -39,14 +39,7 @@ fun Man.moveUpDown(): Man {
 
 //Add an acceleration on the Y-axis that causes the man to descend
 fun Man.gravity(): Man {
-    return Man(
-        pos.plus(speed = Speed(this.speed.dx, CLIMBING_SPEED)).limitToArea(MAX_X, MAX_Y),
-        faced,
-        this.stateJump,
-        speed.stopIfInCell(pos.plus(speed)),
-        0,
-        0
-    )
+    return Man(pos.plus(speed = Speed(this.speed.dx, CLIMBING_SPEED)).limitToArea(MAX_X, MAX_Y), faced, this.stateJump, speed.stopIfInCell(pos.plus(speed)), 0, 0)
 }
 
 
