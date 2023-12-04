@@ -15,6 +15,8 @@ const val VIEW_FACTOR = 2 // each cell is VIEW_FACTOR x sprite
 const val CELL_WIDTH = VIEW_FACTOR * SPRITE_WIDTH   // [pixels]
 const val CELL_HEIGHT = VIEW_FACTOR * SPRITE_HEIGHT  // [pixels]
 
+
+
 /**
  * Creates a canvas with the dimensions of the arena.
  */
@@ -110,6 +112,56 @@ fun Canvas.drawGame(game: Game) {
 /**
  * Draws the man in canvas according to the direction he is facing.
  */
+
+/*
+fun Canvas.drawMan(m: Man) {
+    val frameR = when (m.animationCicle) {
+        1 -> 4
+        2 -> 3
+        3 -> 2
+        4 -> 3
+        5 -> 4
+        else -> 3
+    }
+    val frameL = when (m.animationCicle) {
+        1 -> 4
+        2 -> 3
+        3 -> 2
+        4 -> 3
+        5 -> 4
+        else -> 3
+    }
+    val frameU = when (m.animationCicle) {
+        1 -> 4
+        2 -> 3
+        3 -> 2
+        4 -> 3
+        5 -> 4
+        else -> 3
+    }
+    val frameD = when (m.animationCicle) {
+        1 -> 4
+        2 -> 3
+        3 -> 2
+        4 -> 3
+        5 -> 4
+        else -> 3
+    }
+
+    val sprite = when(m.faced) {
+        //Animations for Man
+        Direction.LEFT ->Sprite(0, frameR, 2)
+
+        Direction.RIGHT ->Sprite(0, frameR, 2)
+
+        Direction.UP-> Sprite(0, frameR, 2)
+
+        Direction.DOWN ->Sprite(0, frameR, 2)
+    }
+    drawSprite(m.pos, sprite)
+}*/
+
+
 
 fun Canvas.drawMan(m: Man) {
     val sprite = when(m.faced) {
