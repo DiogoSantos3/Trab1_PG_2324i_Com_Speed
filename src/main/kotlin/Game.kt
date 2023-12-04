@@ -118,11 +118,11 @@ fun Game.stepFrame(): Game {
     if (!isOver()) {
         return when {
             //Man jumping
-            (man.jumpCycle > 0  && (man.jumpCycle == 16 || !man.detectIfisFloor(floor))) -> {
+            (man.jumpCycle > 0 && (man.jumpCycle == 16 || !man.detectIfisFloor(floor))) -> {
                 this.copy(man.copy(jumpCycle = man.jumpCycle - 1).jump(), time = time - 1, scoreAdded = false) }
 
             //Man standing on stairs
-            (man.animationCicle > 0  && man.detectIfisStairs(stairs) && !man.stateJump) -> {
+            (man.animationCicle > 0  && man.stateJump==false && man.detectIfisStairs(stairs) && !man.stateJump) -> {
                 this.copy(man.copy(animationCicle = man.animationCicle - 1).moveUpDown(), time = time - 1, scoreAdded = false) }
 
             //Man falling
@@ -130,7 +130,7 @@ fun Game.stepFrame(): Game {
                 this.copy(man.gravity(), time = time - 1, scoreAdded = false) }
 
             //Man jumping without standing in stairs
-            (man.stateJump && !man.detectIfisStairs(stairs)) ->
+            (man.stateJump) ->
                 this.copy((man.copy(pos = Point(man.pos.x, man.pos.y).toCell().toPoint(), stateJump = false, speed = Speed(0, 0), animationCicle = 2)))
 
             else -> {
