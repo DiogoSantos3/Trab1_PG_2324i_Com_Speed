@@ -48,18 +48,10 @@ fun Man.jump(): Man {
     val newDyTemp = this.speed.dy - AC_JUMP
     val newYTemp = this.pos.y - this.speed.dy
     val newXTemp = when (faced) {
-        Direction.RIGHT -> this.pos.x + speed.dx
-        Direction.LEFT -> this.pos.x + speed.dx
+        Direction.RIGHT,Direction.LEFT -> this.pos.x + speed.dx
         else -> this.pos.x
     }
-    return Man(
-        Point(newXTemp, newYTemp).limitToArea(MAX_X, MAX_Y),
-        this.faced,
-        true,
-        speed = Speed(this.speed.dx, newDyTemp),
-        this.jumpCycle,
-        this.animationCicle
-    )
+    return Man(Point(newXTemp, newYTemp).limitToArea(MAX_X, MAX_Y), this.faced, true, speed = Speed(this.speed.dx, newDyTemp), this.jumpCycle, this.animationCicle)
 }
 
 //Detects if the man is on the stairs
