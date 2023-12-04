@@ -125,13 +125,23 @@ fun Game.stepFrame(): Game {
                 Game(man.copy(jumpCycle = man.jumpCycle - 1).jump(), floor, stairs, eggs, man.removeFood(food), score + 50, time = time - 1, scoreAdded = false)
 
             //Man jumping on eggs
-            (man.jumpCycle > 0 && man.eggs(eggs) && (man.jumpCycle == 16 || !man.detectIfisFloor(floor))) ->
-                Game(man.copy(jumpCycle = man.jumpCycle - 1).jump(), floor, stairs, man.removeEggs(eggs), food, score + 100, time = time - 1,scoreAdded = false)
+            //(man.jumpCycle > 0 && man.eggs(eggs) && (man.jumpCycle == 16 || !man.detectIfisFloor(floor))) ->
+                //Game(man.copy(jumpCycle = man.jumpCycle - 1).jump(), floor, stairs, man.removeEggs(eggs), food, score + 100, time = time - 1,scoreAdded = false)
 
             //Man jumping
-            (man.jumpCycle > 0  && (man.jumpCycle == 16 || !man.detectIfisFloor(floor))) ->
-                Game(man.copy(jumpCycle = man.jumpCycle - 1).jump(), floor, stairs, eggs, food, score, time = time - 1,scoreAdded = false)
+            (man.jumpCycle > 0  && (man.jumpCycle == 16 || !man.detectIfisFloor(floor))) -> {
 
+                Game(
+                    man.copy(jumpCycle = man.jumpCycle - 1).jump(),
+                    floor,
+                    stairs,
+                    eggs,
+                    food,
+                    score,
+                    time = time - 1,
+                    scoreAdded = false
+                )
+            }
 
             //Man standing on stairs
             (man.animationCicle > 0  && man.detectIfisStairs(stairs) && !man.stateJump) ->
@@ -143,7 +153,7 @@ fun Game.stepFrame(): Game {
                 Game(man.gravity(), floor, stairs, eggs, food, score, time = time - 1,scoreAdded = false)
 
             //Man over egg
-            (man.eggs(eggs)) ->
+            (man.eggs(eggs) && man.stateJump==false) ->
                 Game(man.copy(animationCicle = man.animationCicle - 1).move(), floor, stairs, man.removeEggs(eggs), food, score + 100, time = time - 1,scoreAdded = false)
 
             //Man over food
