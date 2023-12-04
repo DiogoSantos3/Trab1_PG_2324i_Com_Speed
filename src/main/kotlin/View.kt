@@ -113,56 +113,6 @@ fun Canvas.drawGame(game: Game) {
  * Draws the man in canvas according to the direction he is facing.
  */
 
-/*
-fun Canvas.drawMan(m: Man) {
-    val frameR = when (m.animationCicle) {
-        1 -> 4
-        2 -> 3
-        3 -> 2
-        4 -> 3
-        5 -> 4
-        else -> 3
-    }
-    val frameL = when (m.animationCicle) {
-        1 -> 4
-        2 -> 3
-        3 -> 2
-        4 -> 3
-        5 -> 4
-        else -> 3
-    }
-    val frameU = when (m.animationCicle) {
-        1 -> 4
-        2 -> 3
-        3 -> 2
-        4 -> 3
-        5 -> 4
-        else -> 3
-    }
-    val frameD = when (m.animationCicle) {
-        1 -> 4
-        2 -> 3
-        3 -> 2
-        4 -> 3
-        5 -> 4
-        else -> 3
-    }
-
-    val sprite = when(m.faced) {
-        //Animations for Man
-        Direction.LEFT ->Sprite(0, frameR, 2)
-
-        Direction.RIGHT ->Sprite(0, frameR, 2)
-
-        Direction.UP-> Sprite(0, frameR, 2)
-
-        Direction.DOWN ->Sprite(0, frameR, 2)
-    }
-    drawSprite(m.pos, sprite)
-}*/
-
-
-
 fun changeSprite(direction: Direction, animationCycle: Int): Sprite {
     return when (direction) {
         Direction.LEFT, Direction.RIGHT -> when (animationCycle) {
