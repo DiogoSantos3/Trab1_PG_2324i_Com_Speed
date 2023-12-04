@@ -115,52 +115,23 @@ fun Canvas.drawGame(game: Game) {
 
 /*
 fun Canvas.drawMan(m: Man) {
-    val frameR = when (m.animationCicle) {
-        1 -> 4
-        2 -> 3
-        3 -> 2
-        4 -> 3
-        5 -> 4
-        else -> 3
-    }
-    val frameL = when (m.animationCicle) {
-        1 -> 4
-        2 -> 3
-        3 -> 2
-        4 -> 3
-        5 -> 4
-        else -> 3
-    }
-    val frameU = when (m.animationCicle) {
-        1 -> 4
-        2 -> 3
-        3 -> 2
-        4 -> 3
-        5 -> 4
-        else -> 3
-    }
-    val frameD = when (m.animationCicle) {
-        1 -> 4
-        2 -> 3
-        3 -> 2
-        4 -> 3
-        5 -> 4
-        else -> 3
-    }
-
-    val sprite = when(m.faced) {
-        //Animations for Man
-        Direction.LEFT ->Sprite(0, frameR, 2)
-
-        Direction.RIGHT ->Sprite(0, frameR, 2)
-
-        Direction.UP-> Sprite(0, frameR, 2)
-
-        Direction.DOWN ->Sprite(0, frameR, 2)
-    }
+    val sprite = getManSprite(m)
     drawSprite(m.pos, sprite)
-}*/
+}
 
+fun getManSprite(m: Man): Sprite {
+    val xOffset = if (m.faced == Direction.LEFT) 2 else 0
+    val yOffset = if (m.faced == Direction.UP) 1 else if (m.faced == Direction.DOWN) 3 else 2
+    val cycle = m.animationCicle % 5
+
+    return when (cycle) {
+        1 -> Sprite(xOffset, yOffset + 2, 2)
+        2 -> Sprite(xOffset, yOffset + 1, 2)
+        3 -> Sprite(xOffset, yOffset, 2)
+        4 -> Sprite(xOffset, yOffset + 1, 2)
+        else -> Sprite(xOffset, yOffset + 2, 2)
+    }
+}*/
 
 
 fun Canvas.drawMan(m: Man) {

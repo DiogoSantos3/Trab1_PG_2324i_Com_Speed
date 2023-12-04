@@ -117,12 +117,16 @@ fun Game.newStateJump(direction: Direction, man: Man): Game {
 fun Game.stepFrame(): Game {
     if (!isOver()) {
         return when {
+
             //Man jumping
             (man.jumpCycle > 0 && (man.jumpCycle == 16 || !man.detectIfisFloor(floor))) -> {
+
+                if(man.jumpCycle==16)this.copy((man.copy(pos = Point(man.pos.x, man.pos.y).toCell().toPoint(), stateJump = false, speed = Speed(0, 0), animationCicle = 2)))
+
                 this.copy(man.copy(jumpCycle = man.jumpCycle - 1).jump(), time = time - 1, scoreAdded = false) }
 
             //Man standing on stairs
-            (man.animationCicle > 0  && man.stateJump==false && man.detectIfisStairs(stairs) && !man.stateJump) -> {
+            (man.animationCicle > 0 && !man.stateJump && man.detectIfisStairs(stairs)) -> {
                 this.copy(man.copy(animationCicle = man.animationCicle - 1).moveUpDown(), time = time - 1, scoreAdded = false) }
 
             //Man falling
