@@ -163,46 +163,26 @@ fun Canvas.drawMan(m: Man) {
 
 
 
-fun Canvas.drawMan(m: Man) {
-    val sprite = when(m.faced) {
-        //Animations for Man
-        Direction.LEFT ->
-            when (m.animationCicle) {
-                1-> Sprite(2, 4, 2)
-                2-> Sprite(2,3,2)
-                3->Sprite(2,2,2)
-                4->Sprite(2,3,2)
-                5->Sprite(2, 4, 2)
-                else-> Sprite(2,3,2)//Stopped
-            }
-
-        Direction.RIGHT ->
-            when (m.animationCicle) {
-                1-> Sprite(0, 4, 2)
-                2-> Sprite(0,3,2)
-                3->Sprite(0,2,2)
-                4->Sprite(0,3,2)
-                5->Sprite(0, 4, 2)
-                else-> Sprite(0,3,2)//Stopped
-            }
-
-        Direction.UP->
-            when (m.animationCicle) {
-                1-> Sprite(4, 3, 2)
-                2-> Sprite(4, 2, 2)
-                3->Sprite(4, 1, 2)
-                else ->Sprite(4, 0, 2)//Stopped
-            }
-
-        Direction.DOWN ->
-            when (m.animationCicle) {
-                1-> Sprite(4, 4, 2)
-                2-> Sprite(4, 3, 2)
-                3-> Sprite(4, 2, 2)
-                4-> Sprite(4, 1, 2)
-                else -> Sprite(4, 0, 2)//Stopped
-
-            }
+fun changeSprite(direction: Direction, animationCycle: Int): Sprite {
+    return when (direction) {
+        Direction.LEFT, Direction.RIGHT -> when (animationCycle) {
+            1 -> Sprite(if (direction == Direction.LEFT) 2 else 0, 4, 2)
+            2, 4 -> Sprite(if (direction == Direction.LEFT) 2 else 0, 3, 2)
+            3 -> Sprite(if (direction == Direction.LEFT) 2 else 0, 2, 2)
+            5 -> Sprite(if (direction == Direction.LEFT) 2 else 0, 4, 2)
+            else -> Sprite(if (direction == Direction.LEFT) 2 else 0, 3, 2) // Stopped
+        }
+        Direction.UP,Direction.DOWN -> when (animationCycle) {
+            1 -> Sprite(4, if(direction == Direction.UP) 1 else 4, 2)
+            2 -> Sprite(4, if(direction == Direction.UP) 2 else 3, 2)
+            3 -> Sprite(4, if(direction == Direction.UP) 3 else 2, 2)
+            4 -> Sprite(4, if(direction == Direction.UP) 4 else 1, 2)
+            else -> Sprite(4, 0, 2) // Stopped
+        }
     }
+}
+
+fun Canvas.drawMan(m: Man) {
+    val sprite = changeSprite(m.faced, m.animationCicle)
     drawSprite(m.pos, sprite)
 }

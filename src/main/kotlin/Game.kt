@@ -127,7 +127,7 @@ fun Game.stepFrame(): Game {
                 this.copy(man.copy(animationCicle = man.animationCicle - 1).moveUpDown(), time = time - 1, scoreAdded = false) }
 
             //Man falling
-            (!man.detectIfisStairs(stairs) && !man.detectIfisFloor(floor)) -> {
+            (!man.detectIfisStairs(stairs) && !man.detectIfisFloor(floor) && man.stateJump==false) -> {
                 this.copy(man.gravity(), time = time - 1, scoreAdded = false) }
 
             //Man jumping without standing in stairs
