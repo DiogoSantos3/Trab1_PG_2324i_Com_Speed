@@ -113,7 +113,7 @@ fun Game.newStateJump(direction: Direction, man: Man): Game {
  * @return the game after the next frame.
  * Every 30ms the game is updated according to the conditions
  */
-
+//teste
 fun Game.stepFrame(): Game {
     if (!isOver()) {
         return when {
