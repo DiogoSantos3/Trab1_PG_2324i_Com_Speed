@@ -23,7 +23,8 @@ data class Game(
     val food: List<Cell>,
     val score: Int,
     val scoreAdded: Boolean,
-    val time: Int
+    val time: Int,
+    val hen: Hen
 )
 
 /**
@@ -41,7 +42,8 @@ fun loadGame(fileName: String): Game {
         food = cells.ofType(CellType.FOOD),
         score = 0,
         time = 2666,
-        scoreAdded = false
+        scoreAdded = false,
+        hen = createHen(cells.first { it.type == CellType.HEN }.cell)
     )
 }
 
