@@ -27,10 +27,12 @@ fun createMan(cell: Cell) = Man(
     animationCicle = 0
 )
 
+
 //Update the X-coordinate by adding an acceleration on the X-axis
 fun Man.move(): Man {
     return Man(pos.plus(speed).limitToArea(MAX_X, MAX_Y), faced, this.stateJump, speed.stopIfInCell(pos.plus(speed)), 0,this.animationCicle)
 }
+
 
 //Update the Y-coordinate by adding an acceleration on the Y-axis
 fun Man.moveUpDown(): Man {

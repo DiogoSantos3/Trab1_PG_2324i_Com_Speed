@@ -14,7 +14,7 @@ fun main() {
         arena.onKeyPressed { key ->
             if (key.code == ESCAPE_CODE) arena.close()
             game = game.doAction(key.code.toAction())
-            arena.drawGame(game)
+            arena.drawGame(game)             
         }
         arena.onTimeProgress(FRAME_TIME) {
             game = game.stepFrame()

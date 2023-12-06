@@ -103,6 +103,7 @@ fun Canvas.drawGame(game: Game) {
 
     drawScore(game.score)
     drawTime(game.time)
+    drawHen(game.hen)
     drawMan(game.man)
     endGame(game)
 }
@@ -110,6 +111,38 @@ fun Canvas.drawGame(game: Game) {
 /**
  * Draws the man in canvas according to the direction he is facing.
  */
+fun Canvas.drawHen(h: Hen) {
+    val sprite = when(h.faced) {
+        //Animations for Hen
+        Direction.LEFT ->
+            when (h.animationCicle) {
+                1-> Sprite(3, 6, 3)
+                else-> Sprite(3,5,3)//Stopped
+            }
+
+        Direction.RIGHT ->
+            when (h.animationCicle) {
+                1-> Sprite(6, 1, 3)
+                else-> Sprite(0,5,3)//Stopped
+            }
+
+        Direction.UP->
+            when (h.animationCicle) {
+                1-> Sprite(0, 11, 3)
+                else ->Sprite(1, 11, 3)//Stopped
+            }
+
+        Direction.DOWN ->
+            when (h.animationCicle) {
+                1-> Sprite(0, 11, 3)
+                else -> Sprite(1, 11, 3)//Stopped
+
+            }
+    }
+    drawSprite(h.pos, sprite)
+}
+
+
 
 fun Canvas.drawMan(m: Man) {
     val sprite = when(m.faced) {
