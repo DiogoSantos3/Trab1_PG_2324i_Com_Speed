@@ -23,8 +23,7 @@ data class Game(
     val food: List<Cell>,
     val score: Int,
     val scoreAdded: Boolean,
-    val time: Int,
-    val hen: Hen
+    val time: Int
 )
 
 /**
@@ -42,8 +41,7 @@ fun loadGame(fileName: String): Game {
         food = cells.ofType(CellType.FOOD),
         score = 0,
         time = 2666,
-        scoreAdded = false,
-        hen = createHen(cells.first { it.type == CellType.HEN }.cell)
+        scoreAdded = false
     )
 }
 
@@ -96,14 +94,12 @@ fun Game.newStateMove(direction: Direction, man: Man): Game {
         Direction.DOWN -> man.copy(speed = Speed(0, CLIMBING_SPEED), animationCicle = 4)
     }
     val game = this.copy(man = updatedMan.copy(faced = direction))
-
     return game
 }
 
 //Create a new state of jump
 fun Game.newStateJump(direction: Direction, man: Man): Game {
     val updatedMan = when (direction) {
-
         Direction.RIGHT -> man.copy(stateJump = true, speed = Speed(MOVE_SPEED, CELL_HEIGHT / 2), jumpCycle = 16)
         Direction.LEFT -> man.copy(stateJump = true, speed = Speed(-MOVE_SPEED, CELL_HEIGHT / 2), jumpCycle = 16)
         else -> man
@@ -116,66 +112,43 @@ fun Game.newStateJump(direction: Direction, man: Man): Game {
  * If the man is stopped, returns current game.
  * @receiver the current game.
  * @return the game after the next frame.
+ * Every 30ms the game is updated according to the conditions
  */
-//Every 30ms the game is updated according to the conditions
 fun Game.stepFrame(): Game {
     if (!isOver()) {
-        println(man)
         return when {
-            //Man jumping on food
-            (man.jumpCycle > 0 && man.food(food) && (man.jumpCycle == 16 || !man.detectIfisFloor(floor))) ->
-                Game(man.copy(jumpCycle = man.jumpCycle - 1).jump(), floor, stairs, eggs, man.removeFood(food), score + 50, time = time - 1, scoreAdded = false, hen = hen)
-
-            //Man jumping on eggs
-            //(man.jumpCycle > 0 && man.eggs(eggs) && (man.jumpCycle == 16 || !man.detectIfisFloor(floor))) ->
-                //Game(man.copy(jumpCycle = man.jumpCycle - 1).jump(), floor, stairs, man.removeEggs(eggs), food, score + 100, time = time - 1,scoreAdded = false)
 
             //Man jumping
-            (man.jumpCycle > 0  && (man.jumpCycle == 16 || !man.detectIfisFloor(floor))) -> {
+            (man.jumpCycle > 0 && (man.jumpCycle == 16 || !man.detectIfisFloor(floor))) -> {
 
-                Game(
-                    man.copy(jumpCycle = man.jumpCycle - 1).jump(),
-                    floor,
-                    stairs,
-                    eggs,
-                    food,
-                    score,
-                    time = time - 1,
-                    scoreAdded = false,
-                    hen = hen
-                )
-            }
+                if(man.jumpCycle==16)this.copy((man.copy(pos = Point(man.pos.x, man.pos.y).toCell().toPoint(), stateJump = false, speed = Speed(0, 0), animationCicle = 2)))
+
+                this.copy(man.copy(jumpCycle = man.jumpCycle - 1).jump(), time = time - 1, scoreAdded = false) }
 
             //Man standing on stairs
-            (man.animationCicle > 0  && man.detectIfisStairs(stairs) && !man.stateJump) ->
-                Game(man.copy(animationCicle = man.animationCicle - 1).moveUpDown(), floor, stairs, eggs, food, score, time = time - 1,scoreAdded = false, hen = hen.copy(animationCicle = hen.animationCicle - 1).move())
-
+            (man.animationCicle > 0 && !man.stateJump && man.detectIfisStairs(stairs)) -> {
+                this.copy(man.copy(animationCicle = man.animationCicle - 1).moveUpDown(), time = time - 1, scoreAdded = false) }
 
             //Man falling
-            (!man.detectIfisStairs(stairs) && !man.detectIfisFloor(floor)) ->
-                Game(man.gravity(), floor, stairs, eggs, food, score, time = time - 1,scoreAdded = false, hen = hen.copy(animationCicle = hen.animationCicle - 1).move())
-
-            //Man over egg
-            (man.eggs(eggs) && man.stateJump==false) ->
-                Game(man.copy(animationCicle = man.animationCicle - 1).move(), floor, stairs, man.removeEggs(eggs), food, score + 100, time = time - 1,scoreAdded = false, hen = hen.copy(animationCicle = hen.animationCicle - 1).move())
-
-            //Man over food
-            (man.food(food)) ->
-                Game(man.copy(animationCicle = man.animationCicle - 1).move(), floor, stairs, eggs, man.removeFood(food), score + 50, time = time - 1,scoreAdded = false, hen = hen.copy(animationCicle = hen.animationCicle - 1).move())
+            (!man.detectIfisStairs(stairs) && !man.detectIfisFloor(floor)) -> {
+                this.copy(man.gravity(), time = time - 1, scoreAdded = false) }
 
             //Man jumping without standing in stairs
-            (man.stateJump && !man.detectIfisStairs(stairs)) ->
-                Game(man.copy(pos = Point(man.pos.x, man.pos.y).toCell().toPoint(), stateJump = false, speed = Speed(0, 0), animationCicle = 2), floor, stairs, eggs, food, score, time = time - 1,scoreAdded = false, hen = hen.copy(animationCicle = hen.animationCicle - 1).move())
-            //CORREÇÃO TEMPORARIO - NÃO BUGA NAS ESCADAS MAS CAI DA PLATAFORMA NA MESMA -
-            (man.stateJump && !man.detectIfisFloor(floor))->
-                Game(man.copy(pos = Point(man.pos.x, man.pos.y).toCell().toPoint(), stateJump = false, speed = Speed(0, 0), animationCicle = 2), floor, stairs, eggs, food, score, time = time - 1,scoreAdded = false, hen = hen.copy(animationCicle = hen.animationCicle - 1).move())
+            (man.stateJump) ->
+                this.copy((man.copy(pos = Point(man.pos.x, man.pos.y).toCell().toPoint(), stateJump = false, speed = Speed(0, 0), animationCicle = 2)))
 
-            //Man in floor
-            (man.animationCicle > 0 && !man.detectIfisStairs(stairs) && man.detectIfisFloor(floor)) ->
-                Game(man.copy(animationCicle = man.animationCicle - 1).move(), floor, stairs, eggs, food, score, time = time - 1,scoreAdded = false, hen = hen.copy(animationCicle = hen.animationCicle - 1).move())
+            else -> {
+                return when{
+                    man.food(food) ->
+                        this.copy(man.copy(animationCicle = man.animationCicle - 1),food =man.removeFood(food), score = score + 50, time = time - 1, scoreAdded = false)
 
-            else -> Game(man.move(), floor, stairs, eggs, food, score, time = time - 1,scoreAdded = false, hen = hen.copy(animationCicle = hen.animationCicle - 1).move())
+                    man.eggs(eggs)->
+                        this.copy(man.copy(animationCicle = man.animationCicle - 1).move(), eggs = man.removeEggs(eggs), score = score + 100, time = time - 1, scoreAdded = false)
 
+                    else ->
+                        this.copy(man.copy(animationCicle = man.animationCicle - 1).move(), time = time - 1, scoreAdded = false)
+                }
+            }
         }
     }
     // When all the food and eggs are eaten the game ends and the remaing time is added to score
