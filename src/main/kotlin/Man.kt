@@ -44,7 +44,6 @@ fun Man.gravity(): Man {
     return Man(pos.plus(speed = Speed(this.speed.dx, CLIMBING_SPEED)).limitToArea(MAX_X, MAX_Y), faced, this.stateJump, speed.stopIfInCell(pos.plus(speed)), 0, 0)
 }
 
-
 //Add speed on the Y-axis and X-axis making the man jump
 fun Man.jump(): Man {
     val newDyTemp = this.speed.dy - AC_JUMP
@@ -57,33 +56,16 @@ fun Man.jump(): Man {
 }
 
 //Detects if the man is on the stairs
-fun Man.detectIfisStairs(stairs: List<Cell>): Boolean {
-    return stairs.any { pos.toCell().col == it.col && pos.toCell().row == it.row }
-}
+fun Man.detectIfisStairs(stairs: List<Cell>): Boolean = stairs.any { pos.toCell().toPoint() == it.toPoint() }
 
 //Detects if the man is on the floor
-fun Man.detectIfisFloor(floor: List<Cell>): Boolean {
-    return when {
-        floor.any { pos.toCell().col == it.col && pos.toCell().row == it.row - 1 } -> true
-        else -> false
-    }
-}
+fun Man.detectIfisFloor(floor: List<Cell>): Boolean = floor.any { pos.toCell().col == it.col && pos.toCell().row == it.row - 1 }
 
 //Detects if the man is on the floor OR on the stairs
-fun Man.detectIfisFloororstrair(floor: List<Cell>, stairs: List<Cell>): Boolean {
-    return when {
-        floor.any { pos.toCell().col == it.col && pos.toCell().row == it.row - 1 } || stairs.any { pos.toCell().col == it.col && pos.toCell().row == it.row } -> true
-        else -> false
-    }
-}
+fun Man.detectIfisFloororstrair(floor: List<Cell>, stairs: List<Cell>): Boolean = floor.any { pos.toCell().col == it.col && pos.toCell().row == it.row - 1 } || stairs.any { pos.toCell().col == it.col && pos.toCell().row == it.row }
 
 //Ensures man is on a cell type Floor.
-fun Man.detectIfisInsideFloor(floor: List<Cell>): Boolean {
-    return when {
-        floor.any { pos.toCell().col == it.col && pos.toCell().row == it.row } -> true
-        else -> false
-    }
-}
+fun Man.detectIfisInsideFloor(floor: List<Cell>): Boolean = floor.any { pos.toCell().col == it.col && pos.toCell().row == it.row }
 
 //Add the food to the grid
 fun Man.food(food: List<Cell>): Boolean {

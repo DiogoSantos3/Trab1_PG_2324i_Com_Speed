@@ -43,7 +43,7 @@ fun Point.toCell() = Cell(y / CELL_HEIGHT, x / CELL_WIDTH)
  * @receiver the cell to convert.
  * @return the point corresponding to the cell.
  */
-fun Cell.toPoint() = Point(col * CELL_WIDTH, row * CELL_HEIGHT)
+fun Cell.toPoint() = Point((col * CELL_WIDTH), row * CELL_HEIGHT)
 
 
 /**

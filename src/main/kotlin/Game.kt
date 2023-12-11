@@ -8,6 +8,8 @@ import pt.isel.canvas.erase
  */
 enum class Action { WALK_LEFT, WALK_RIGHT, UP_STAIRS, DOWN_STAIRS, JUMP }
 
+enum class State {PLAYING, WINNER,TIMEOUT}
+
 /**
  * Represents all game information.
  * @property man information about man
@@ -24,7 +26,8 @@ data class Game(
     val score: Int,
     val scoreAdded: Boolean,
     val time: Int,
-    val hen: Hen
+    val hen: Hen,
+    val state: State,
 )
 
 /**
@@ -43,7 +46,8 @@ fun loadGame(fileName: String): Game {
         score = 0,
         time = 2666,
         scoreAdded = false,
-        hen = createHen(cells.first { it.type == CellType.HEN }.cell)
+        hen = createHen(cells.first { it.type == CellType.HEN }.cell),
+        state = State.PLAYING
     )
 }
 
@@ -117,27 +121,38 @@ fun Game.newStateJump(direction: Direction, man: Man): Game {
  * Every 30ms the game is updated according to the conditions
  */
 fun Game.stepFrame(): Game {
+    println(this)
     if (!isOver()) {
         return when {
-
             //Man jumping
             (man.jumpCycle > 0 && (man.jumpCycle == 16 || !man.detectIfisFloor(floor))) -> {
-
+                println("Man jumping")
                 if(man.jumpCycle==16)this.copy((man.copy(pos = Point(man.pos.x, man.pos.y).toCell().toPoint(), stateJump = false, speed = Speed(0, 0), animationCicle = 2)))
 
                 this.copy(man.copy(jumpCycle = man.jumpCycle - 1).jump(), time = time - 1, scoreAdded = false) }
 
             //Man standing on stairs
             (man.animationCicle > 0 && !man.stateJump && man.detectIfisStairs(stairs)) -> {
+                println("Man standing on stairs")
                 this.copy(man.copy(animationCicle = man.animationCicle - 1).moveUpDown(), time = time - 1, scoreAdded = false) }
 
             //Man falling
             (!man.detectIfisStairs(stairs) && !man.detectIfisFloor(floor)) -> {
+                println("Man falling")
                 this.copy(man.gravity(), time = time - 1, scoreAdded = false) }
 
             //Man jumping without standing in stairs
-            (man.stateJump) ->
-                this.copy((man.copy(pos = Point(man.pos.x, man.pos.y).toCell().toPoint(), stateJump = false, speed = Speed(0, 0), animationCicle = 2)))
+            (man.stateJump) -> {
+                println("Man jumping without standing in stairs")
+                this.copy(
+                    (man.copy(
+                        pos = Point(man.pos.x, man.pos.y).toCell().toPoint(),
+                        stateJump = false,
+                        speed = Speed(0, 0),
+                        animationCicle = 2
+                    ))
+                )
+            }
 
             else -> {
                 return when{
@@ -157,6 +172,11 @@ fun Game.stepFrame(): Game {
     return if(!scoreAdded){
         this.copy(score = score+time, scoreAdded = true)
     }
-    else this
-
+    else{
+     return when{
+         time == 0 -> this.copy(state=State.TIMEOUT)
+         this.eggs.isEmpty() && this.food.isEmpty() -> this.copy(state=State.WINNER)
+         else->this
+     }
+    }
 }
