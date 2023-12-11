@@ -170,13 +170,13 @@ fun Game.stepFrame(): Game {
     }
     // When all the food and eggs are eaten the game ends and the remaing time is added to score
     return if(!scoreAdded){
-        this.copy(score = score+time, scoreAdded = true)
+        this.copy(score = score+time, scoreAdded = true) // This flag is used to prevent time from being added to score more than one time.
     }
     else{
      return when{
-         time == 0 -> this.copy(state=State.TIMEOUT)
-         this.eggs.isEmpty() && this.food.isEmpty() -> this.copy(state=State.WINNER)
-         else->this
+         time == 0 -> this.copy(state=State.TIMEOUT) // Updates the state of the game when there is no time left.
+         this.eggs.isEmpty() && this.food.isEmpty() -> this.copy(state=State.WINNER) // Updates the state og the game when man eats all food and eggs.
+         else->this // Returns the current state of the game.
      }
     }
 }
